@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\Consultas\" />
-    <Folder Include="Components\Pages\Registros\" />
     <Folder Include="Data\" />
   </ItemGroup>
 
