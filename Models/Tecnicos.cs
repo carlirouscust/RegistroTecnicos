@@ -6,10 +6,10 @@ namespace RegistroTecnicos.Models
     {
         [Key]
         public int tecnicosID { get; set; }
-        [Required(ErrorMessage = "El campo de Nombre es obligatorio")]
+        [Required(ErrorMessage = "El campo es obligatorio")]
 
         public string? Nombre { get; set; }
-
-        public int sueldoHora { get; set; }
+        [Required(ErrorMessage = "El campo es obligatorio")]
+        public int? sueldoHora { get; set; }
     }
 }
