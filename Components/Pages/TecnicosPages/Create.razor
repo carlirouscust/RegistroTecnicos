@@ -22,22 +22,29 @@
                     </div>
                 </div>
             </div>
+        
+            @* Nombre *@
+            <div class="mb-3">
+                <label for="Nombre" class="form-label">Nombre:</label>
+                <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
+                <ValidationMessage For="@(() => Tecnicos.Nombre)" />
+            </div>
+
+            @* SueldoHora *@
+            <div class="mb-3">
+                <label for="SueldoHora" class="form-label">Sueldo Horas:</label>
+                <InputNumber @bind-Value="Tecnicos.sueldoHora" class="form-control" />
+                <ValidationMessage For="@(() => Tecnicos.sueldoHora)" />
+            </div>
         </div>
 
-        @* Nombre *@
-        <div class="mb-3">
-            <label for="Nombre" class="form-label">Nombre:</label>
-            <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
-            <ValidationMessage For="@(() => Tecnicos.Nombre)" />
+        <div class="card-footer bg-light d-flex justify-content-center mt-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+                <a type="button" href="/Tecnicos/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+            </div>
         </div>
-
-        @* SueldoHora *@
-        <div class="mb-3">
-            <label for="SueldoHora" class="form-label">Sueldo Horas:</label>
-            <InputNumber @bind-Value="Tecnicos.sueldoHora" class="form-control" />
-            <ValidationMessage For="@(() => Tecnicos.sueldoHora)" />
-        </div>
-
     </div>
 </EditForm>
 
