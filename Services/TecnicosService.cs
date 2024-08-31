@@ -61,6 +61,7 @@ namespace RegistroTecnicos.Services
                 .Where(criterio)
                 .ToList();
         }
+         //COmentario
 
     }
 }
