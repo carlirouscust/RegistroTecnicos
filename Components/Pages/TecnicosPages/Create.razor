@@ -32,7 +32,7 @@
 
             @* SueldoHora *@
             <div class="mb-3">
-                <label for="SueldoHora" class="form-label">Sueldo Horas:</label>
+                <label for="SueldoHora" class="form-label">Sueldo Por Horas:</label>
                 <InputNumber @bind-Value="Tecnicos.sueldoHora" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.sueldoHora)" />
             </div>
@@ -97,6 +97,7 @@
         if (guardo)
         {
             Nuevo();
+            Volver();
         }
     }
 
@@ -104,5 +105,10 @@
     {
         var eliminado = await TecnicosService.Eliminar(Tecnicos.tecnicosID);
         Nuevo();
+    }
+
+    public void Volver()
+    {
+        NavigationManager.NavigateTo("/Tecnicos/Index");
     }
 }
