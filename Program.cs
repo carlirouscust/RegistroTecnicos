@@ -21,7 +21,7 @@ namespace RegistroTecnicos
             //agregamos el contexto al builder con el ConStr
             builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
 
-            builder.Services.AddScoped<PrioridadService>();
+            builder.Services.AddScoped<TecnicosService>();
 
             var app = builder.Build();
 
