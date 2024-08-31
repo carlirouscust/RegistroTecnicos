@@ -1,10 +1,132 @@
 ﻿@page "/Tecnicos/Index"
-
 @inject TecnicosService TecnicosService
 @rendermode InteractiveServer
 
+<EditForm Model="ListaTecnicos" class="border shadow-lg p-3 rounded">
+    <Toasts class="p-3" Messages="messages" Placement="ToastsPlacement.TopRight" />
 
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Tecnicos</h3>
+    </div>
+    <div class="card-body">
+        <Button Color="ButtonColor.Primary"
+                @onclick="() => ShowMessage(ToastType.Primary)">
+            Primary Toast
+        </Button>
+
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="Nombre">Nombre</option>
+                    <option value="SueldoHoras">Sueldo Horas</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <a href="/Prioridad/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>TecnicoID</th>
+                <th>Nombre</th>
+                <th>Sueldo Horas</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tecnicos in ListaTecnicos)
+            {
+                <tr>
+                    <td>@tecnicos.tecnicosID</td>
+                    <td>@tecnicos.Nombre</td>
+                    <td>@tecnicos.sueldoHora</td>
+                    <td>
+                        <a class="btn btn-outline-primary" href="/Prioridad/Details/@tecnicos.tecnicosID">
+                            <span class="bi bi-info-circle-fill"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-success" href="/Prioridad/Edit/@tecnicos.tecnicosID">
+                            <span class="bi bi-marker-tip"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-warning" href="/Prioridad/Delete/@tecnicos.tecnicosID">
+                            <span class="bi bi-dash-circle-fill"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</EditForm>
 
 @code {
+    public Tecnicos Tecnicos = new Tecnicos();
 
+    public List<Tecnicos> ListaTecnicos = new List<Tecnicos>();
+
+    List<ToastMessage> messages = new List<ToastMessage>();
+
+    private string filtro = "Id";
+    private string valorFiltro = "";
+
+    private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
+
+    private ToastMessage CreateToastMessage(ToastType toastType)
+      => new ToastMessage
+          {
+              Type = toastType,
+              Title = "Blazor Bootstrap",
+              HelpText = $"{DateTime.Now}",
+              Message = $"Hello, world! This is a toast message. DateTime: {DateTime.Now}",
+          };
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTecnicos = TecnicosService.Listar(c => true);
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await TecnicosService.Guardar(Tecnicos);
+    }
+
+    private async Task Buscar()
+    {
+        if (valorFiltro.Trim() != "")
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int TecnicosID))
+            {
+                ListaTecnicos =  TecnicosService.Listar(p => p.tecnicosID == TecnicosID);
+            }
+            else if (filtro == "Nombre")
+            {
+                ListaTecnicos =  TecnicosService.Listar(p => p.Nombre == valorFiltro);
+            }
+            else if (filtro == "SueldoHoras" && int.TryParse(valorFiltro, out int SueldoHoras))
+            {
+                ListaTecnicos =  TecnicosService.Listar(p => p.sueldoHora == SueldoHoras);
+            }
+        }
+        else
+        {
+            ListaTecnicos =  TecnicosService.Listar(p => true);
+        }
+    }
 }

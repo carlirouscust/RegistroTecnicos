@@ -11,6 +11,8 @@ namespace RegistroTecnicos
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddBlazorBootstrap();
+
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
@@ -22,6 +24,8 @@ namespace RegistroTecnicos
             builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
 
             builder.Services.AddScoped<TecnicosService>();
+
+           
 
             var app = builder.Build();
 
