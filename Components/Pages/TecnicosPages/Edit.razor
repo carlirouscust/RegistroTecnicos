@@ -1,4 +1,4 @@
-﻿@page "/Tecnicos/Edit/{TecnicosID:int}"
+﻿@page "/Tecnicos/Edit/{tecnicosID:int}"
 @inject TecnicosService TecnicosService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
@@ -15,7 +15,7 @@
             <div class="row">
 
                 <div class="col-md-6 mb-3">
-                    <label for="PrioridadId" class="form-label">TecnicoID:</label>
+                    <label for="TecnicosID" class="form-label">TecnicoID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
                             <InputNumber @bind-Value="Tecnicos.tecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
@@ -88,16 +88,14 @@
 
     public async Task Guardar()
     {
-        if (!await Validar())
-        {
-            return;
-        }
 
         var guardo = await TecnicosService.Guardar(Tecnicos);
         if (guardo)
         {
             Nuevo();
+            Volver();
         }
+        
     }
 
     public async Task Eliminar()
@@ -105,5 +103,11 @@
         var eliminado = await TecnicosService.Eliminar(Tecnicos.tecnicosID);
         Nuevo();
     }
+
+    public void Volver()
+    {
+        NavigationManager.NavigateTo("/Tecnicos/Index");
+    }
+   
 }
 
