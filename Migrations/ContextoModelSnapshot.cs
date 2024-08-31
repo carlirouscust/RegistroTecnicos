@@ -22,9 +22,12 @@ namespace RegistroTecnicos.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("descripcion")
+                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("sueldoHora")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("tecnicosID");
 

@@ -3,6 +3,99 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-@code {
+<EditForm Model="TecnicosService" OnValidSubmit="Guardar">
+	<DataAnnotationsValidator />
+	<div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Registro de Tecnicos</h3>
+        </div>   
+        
+        <div class="card-body">
+            @* TecnicoID *@
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="TecnicosID" class="form-label">TecnicosID:</label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1em;">
+                            <InputNumber @bind-Value="Tecnicos.tecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        @* Nombre *@
+        <div class="mb-3">
+            <label for="Nombre" class="form-label">Nombre:</label>
+            <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
+            <ValidationMessage For="@(() => Tecnicos.Nombre)" />
+        </div>
+
+        @* SueldoHora *@
+        <div class="mb-3">
+            <label for="SueldoHora" class="form-label">Sueldo Horas:</label>
+            <InputNumber @bind-Value="Tecnicos.sueldoHora" class="form-control" />
+            <ValidationMessage For="@(() => Tecnicos.sueldoHora)" />
+        </div>
+
+    </div>
+</EditForm>
+
+
+
+
+@code {
+    [Parameter]
+    public int TecnicosID { get; set; }
+
+    public Tecnicos Tecnicos { get; set; } = new Tecnicos();
+    private bool Existe = false;
+
+    public void Nuevo()
+    {
+        Tecnicos = new Tecnicos();
+        Existe = false;
+    }
+
+
+    public async Task Buscar()
+    {
+        Existe = false;
+        var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.tecnicosID);
+
+        if (TecnicoEncontrado != null)
+        {
+            Tecnicos = TecnicoEncontrado;
+        }
+        else
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        Existe = await TecnicosService.Existe(Tecnicos.tecnicosID);
+        return !Existe;
+    }
+
+    public async Task Guardar()
+    {
+        if (!await Validar())
+        {
+            return;
+        }
+
+        var guardo = await TecnicosService.Guardar(Tecnicos);
+        if (guardo)
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminado = await TecnicosService.Eliminar(Tecnicos.tecnicosID);
+        Nuevo();
+    }
 }
