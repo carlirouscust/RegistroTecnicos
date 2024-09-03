@@ -40,6 +40,7 @@
             </div>
         </div>
 
+
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {
             <div class="alert alert-danger" role="alert">
@@ -96,6 +97,7 @@
     {
         Existe = await TecnicosService.Existe(Tecnicos.TecnicosId) ||
                  await TecnicosService.NombreExiste(Tecnicos.Nombre);
+
 
         if (Existe)
         {

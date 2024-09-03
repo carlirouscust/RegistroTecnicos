@@ -37,6 +37,7 @@
             </div>
         </div>
 
+
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {
             <div class="alert alert-danger" role="alert">
@@ -90,6 +91,7 @@
     public async Task<bool> Validar()
     {
         Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre);
+
 
         if (Existe)
         {
