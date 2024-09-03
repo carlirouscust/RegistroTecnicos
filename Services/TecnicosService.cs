@@ -28,7 +28,7 @@ public class TecnicosService
 
     public async Task<bool> Modificar(Tecnicos tecnicos)
     {
-        _context.Update(tecnicos);
+        _context.Tecnicos.Update(tecnicos);
         return await _context.SaveChangesAsync() > 0;
     }
 
