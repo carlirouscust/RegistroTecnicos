@@ -17,7 +17,7 @@
                     <label for="TecnicosID" class="form-label">TecnicoID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Tecnicos.tecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <InputNumber @bind-Value="Tecnicos.TecnicosId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
@@ -33,8 +33,8 @@
             @* SueldoHora *@
             <div class="mb-3">
                 <label for="sueldoHora" class="form-label">Sueldo Por Horas:</label>
-                <InputNumber @bind-Value="Tecnicos.sueldoHora" class="form-control" />
-                <ValidationMessage For="@(() => Tecnicos.sueldoHora)" />
+                <InputNumber @bind-Value="Tecnicos.SueldoHora" class="form-control" />
+                <ValidationMessage For="@(() => Tecnicos.SueldoHora)" />
             </div>
         </div>
 
@@ -68,7 +68,7 @@
     public async Task Buscar()
     {
         Existe = false;
-        var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.tecnicosID);
+        var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosId);
 
         if (TecnicoEncontrado != null)
         {
@@ -82,7 +82,7 @@
 
     public async Task<bool> Validar()
     {
-        Existe = await TecnicosService.Existe(Tecnicos.tecnicosID);
+        Existe = await TecnicosService.Existe(Tecnicos.TecnicosId);
         return !Existe;
     }
 
@@ -103,7 +103,7 @@
 
     public async Task Eliminar()
     {
-        var eliminado = await TecnicosService.Eliminar(Tecnicos.tecnicosID);
+        var eliminado = await TecnicosService.Eliminar(Tecnicos.TecnicosId);
         Nuevo();
     }
 

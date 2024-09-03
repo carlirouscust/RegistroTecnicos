@@ -18,7 +18,7 @@
                     <label for="TecnicosID" class="form-label">TecnicoID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Tecnicos.tecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <InputNumber @bind-Value="Tecnicos.TecnicosId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
@@ -32,8 +32,8 @@
 
             <div class="mb-3">
                 <label for="sueldoHora" class="form-label">Sueldo horas:</label>
-                <InputNumber @bind-Value="Tecnicos.sueldoHora" class="form-control" />
-                <ValidationMessage For="@(() => Tecnicos.sueldoHora)" />
+                <InputNumber @bind-Value="Tecnicos.SueldoHora" class="form-control" />
+                <ValidationMessage For="@(() => Tecnicos.SueldoHora)" />
             </div>
 
         </div>
@@ -59,7 +59,7 @@
     {
         if (tecnicosID.HasValue)
         {
-            Tecnicos.tecnicosID = tecnicosID.Value;
+            Tecnicos.TecnicosId = tecnicosID.Value;
             await Buscar();
         }
     }
@@ -72,7 +72,7 @@
 
     public async Task Buscar()
     {
-        var tecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.tecnicosID);
+        var tecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosId);
 
         if (tecnicoEncontrado != null)
         {
@@ -82,7 +82,7 @@
 
     public async Task<bool> Validar()
     {
-        Existe = await TecnicosService.Existe(Tecnicos.tecnicosID, Tecnicos.Nombre);
+        Existe = await TecnicosService.Existe(Tecnicos.TecnicosId, Tecnicos.Nombre);
         return !Existe;
     }
 
@@ -100,7 +100,7 @@
 
     public async Task Eliminar()
     {
-        var eliminado = await TecnicosService.Eliminar(Tecnicos.tecnicosID);
+        var eliminado = await TecnicosService.Eliminar(Tecnicos.TecnicosId);
         Nuevo();
     }
 

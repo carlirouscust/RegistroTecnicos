@@ -17,7 +17,7 @@ public class TecnicosService
     public async Task<bool> Existe(int tecnicosID, string? Nombre = null)
     {
         return await _context.Tecnicos
-            .AnyAsync(p => p.tecnicosID == tecnicosID);
+            .AnyAsync(p => p.TecnicosId == tecnicosID);
     }
 
     public async Task<bool> Insertar(Tecnicos tecnicos)
@@ -34,7 +34,7 @@ public class TecnicosService
 
     public async Task<bool> Guardar(Tecnicos tecnicos)
     {
-        if (!await Existe(tecnicos.tecnicosID))
+        if (!await Existe(tecnicos.TecnicosId))
             return await Insertar(tecnicos);
         else
             return await Modificar(tecnicos);
@@ -43,7 +43,7 @@ public class TecnicosService
     public async Task<bool> Eliminar(int id)
     {
         var tecnicos = await _context.Tecnicos.
-            Where(P => P.tecnicosID == id).ExecuteDeleteAsync();
+            Where(P => P.TecnicosId == id).ExecuteDeleteAsync();
         return tecnicos > 0;
     }
 
@@ -51,7 +51,7 @@ public class TecnicosService
     {
         return await _context.Tecnicos.
             AsNoTracking()
-            .FirstOrDefaultAsync(P => P.tecnicosID == id);
+            .FirstOrDefaultAsync(P => P.TecnicosId == id);
     }
 
     public List<Tecnicos> Listar(Expression<Func<Tecnicos, bool>> criterio)
