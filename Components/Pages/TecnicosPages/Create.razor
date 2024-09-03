@@ -4,8 +4,10 @@
 @rendermode InteractiveServer
 
 <EditForm Model="Tecnicos" OnValidSubmit="Guardar">
-	<DataAnnotationsValidator />
-	<div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
         <div class="card-header bg-primary text-white" style="text-align: center;">
             <h3> <i class="fas fa-clipboard-list"></i> Registro de Tecnicos</h3>
         </div>   
@@ -38,6 +40,13 @@
             </div>
         </div>
 
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @ErrorMessage
+            </div>
+        }
+
         <div class="card-footer bg-light d-flex justify-content-center mt-3">
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
@@ -51,23 +60,26 @@
 
 
 
+
 @code {
     [Parameter]
     public int TecnicosID { get; set; }
 
     public Tecnicos Tecnicos { get; set; } = new Tecnicos();
     private bool Existe = false;
+    private string ErrorMessage { get; set; } = string.Empty;
 
     public void Nuevo()
     {
         Tecnicos = new Tecnicos();
         Existe = false;
+        ErrorMessage = string.Empty;
     }
-
 
     public async Task Buscar()
     {
         Existe = false;
+        ErrorMessage = string.Empty;
         var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosId);
 
         if (TecnicoEncontrado != null)
@@ -82,7 +94,18 @@
 
     public async Task<bool> Validar()
     {
-        Existe = await TecnicosService.Existe(Tecnicos.TecnicosId);
+        Existe = await TecnicosService.Existe(Tecnicos.TecnicosId) ||
+                 await TecnicosService.NombreExiste(Tecnicos.Nombre);
+
+        if (Existe)
+        {
+            ErrorMessage = "Ya existe un técnico con este ID o nombre.";
+        }
+        else
+        {
+            ErrorMessage = string.Empty;
+        }
+
         return !Existe;
     }
 
@@ -101,14 +124,9 @@
         }
     }
 
-    public async Task Eliminar()
-    {
-        var eliminado = await TecnicosService.Eliminar(Tecnicos.TecnicosId);
-        Nuevo();
-    }
-
     public void Volver()
     {
         NavigationManager.NavigateTo("/Tecnicos/Index");
     }
 }
+

@@ -35,8 +35,14 @@
                 <InputNumber @bind-Value="Tecnicos.SueldoHora" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.SueldoHora)" />
             </div>
-
         </div>
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @ErrorMessage
+            </div>
+        }
 
         <div class="card-footer bg-light d-flex justify-content-center mt-3">
             <div class="btn-group">
@@ -54,6 +60,7 @@
     public int? tecnicosID { get; set; }
     public Tecnicos Tecnicos { get; set; } = new Tecnicos();
     private bool Existe = false;
+    private string ErrorMessage { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -82,12 +89,26 @@
 
     public async Task<bool> Validar()
     {
-        Existe = await TecnicosService.Existe(Tecnicos.TecnicosId, Tecnicos.Nombre);
+        Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre);
+
+        if (Existe)
+        {
+            ErrorMessage = "Ya existe un técnico con este Nombre.";
+        }
+        else
+        {
+            ErrorMessage = string.Empty;
+        }
+
         return !Existe;
     }
 
     public async Task Guardar()
     {
+        if (!await Validar())
+        {
+            return;
+        }
 
         var guardo = await TecnicosService.Guardar(Tecnicos);
         if (guardo)
