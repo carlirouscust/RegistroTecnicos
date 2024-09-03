@@ -114,10 +114,6 @@
             {
                 ListaTecnicos =  TecnicosService.Listar(p => p.Nombre == valorFiltro);
             }
-            else if (filtro == "SueldoHoras" && int.TryParse(valorFiltro, out int SueldoHoras))
-            {
-                ListaTecnicos =  TecnicosService.Listar(p => p.SueldoHora == SueldoHoras);
-            }
         }
         else
         {
