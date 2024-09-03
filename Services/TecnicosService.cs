@@ -20,6 +20,13 @@ public class TecnicosService
             .AnyAsync(p => p.TecnicosId == tecnicosID);
     }
 
+    public async Task<bool> NombreExiste(string? Nombre = null)
+    {
+        return await _context.Tecnicos
+            .AnyAsync(p => p.Nombre == Nombre);
+    }
+
+
     public async Task<bool> Insertar(Tecnicos tecnicos)
     {
         _context.Tecnicos .Add(tecnicos);
@@ -34,7 +41,7 @@ public class TecnicosService
 
     public async Task<bool> Guardar(Tecnicos tecnicos)
     {
-        if (!await Existe(tecnicos.TecnicosId))
+        if (!await Existe(tecnicos.TecnicosId, tecnicos.Nombre))
             return await Insertar(tecnicos);
         else
             return await Modificar(tecnicos);
