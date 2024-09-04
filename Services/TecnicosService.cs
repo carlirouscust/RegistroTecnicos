@@ -29,7 +29,7 @@ public class TecnicosService
 
     public async Task<bool> Insertar(Tecnicos tecnicos)
     {
-        _context.Tecnicos .Add(tecnicos);
+        _context.Tecnicos.Add(tecnicos);
         return await _context.SaveChangesAsync() > 0; 
     }
 
