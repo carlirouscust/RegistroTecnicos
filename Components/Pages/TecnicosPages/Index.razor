@@ -94,7 +94,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTecnicos = TecnicosService.Listar(c => true);
+        ListaTecnicos = await TecnicosService.Listar(c => true);
     }
 
     public async Task Guardar()
@@ -108,16 +108,16 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int TecnicosID))
             {
-                ListaTecnicos =  TecnicosService.Listar(p => p.TecnicosId == TecnicosID);
+                ListaTecnicos =  await TecnicosService.Listar(p => p.TecnicosId == TecnicosID);
             }
             else if (filtro == "Nombre")
             {
-                ListaTecnicos =  TecnicosService.Listar(p => p.Nombre == valorFiltro);
+                ListaTecnicos = await TecnicosService.Listar(p => p.Nombre == valorFiltro);
             }
         }
         else
         {
-            ListaTecnicos =  TecnicosService.Listar(p => true);
+            ListaTecnicos = await TecnicosService.Listar(p => true);
         }
     }
 }
