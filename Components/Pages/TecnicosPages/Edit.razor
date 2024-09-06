@@ -59,6 +59,7 @@
 @code {
     [Parameter]
     public int? tecnicosID { get; set; }
+    public string? Nombre { get; set; }
     public Tecnicos Tecnicos { get; set; } = new Tecnicos();
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
@@ -88,14 +89,23 @@
         }
     }
 
+
     public async Task<bool> Validar()
     {
-        Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre);
+        Nombre = Tecnicos.Nombre;
+
+        if (Nombre == Tecnicos.Nombre && tecnicosID == Tecnicos.TecnicosId)
+        {
+            ErrorMessage = string.Empty;
+            return true;
+        }
+
+        Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre) && await TecnicosService.Existe(Tecnicos.TecnicosId);
 
 
         if (Existe)
         {
-            ErrorMessage = "Ya existe un técnico con este Nombre.";
+            ErrorMessage = "Ya existe un técnico con este Nombre o ID.";
         }
         else
         {
@@ -104,6 +114,7 @@
 
         return !Existe;
     }
+
 
     public async Task Guardar()
     {
@@ -115,10 +126,10 @@
         var guardo = await TecnicosService.Guardar(Tecnicos);
         if (guardo)
         {
-            Nuevo();
             Volver();
         }
-        
+
+
     }
 
     public async Task Eliminar()
@@ -131,6 +142,7 @@
     {
         NavigationManager.NavigateTo("/Tecnicos/Index");
     }
-   
+
 }
+
 
