@@ -14,7 +14,7 @@ public class TecnicosService
         _context = contexto;
     }
 
-    public async Task<bool> Existe(int tecnicosID, string? Nombre = null)
+    public async Task<bool> Existe(int tecnicosID)
     {
         return await _context.Tecnicos
             .AnyAsync(p => p.TecnicosId == tecnicosID);
@@ -41,7 +41,7 @@ public class TecnicosService
 
     public async Task<bool> Guardar(Tecnicos tecnicos)
     {
-        if (!await Existe(tecnicos.TecnicosId, tecnicos.Nombre))
+        if (!await Existe(tecnicos.TecnicosId))
             return await Insertar(tecnicos);
         else
             return await Modificar(tecnicos);
@@ -61,7 +61,7 @@ public class TecnicosService
             .FirstOrDefaultAsync(P => P.TecnicosId == id);
     }
 
-    public List<Tecnicos> Listar(Expression<Func<Tecnicos, bool>> criterio)
+    public async Task <List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
     {
         return _context.Tecnicos.
             AsNoTracking()
