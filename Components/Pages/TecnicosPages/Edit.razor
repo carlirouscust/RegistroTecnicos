@@ -31,6 +31,25 @@
             </div>
 
             <div class="mb-3">
+                <label for="TiposTecnicos" class="form-label">Tipos de tecnicos:</label>
+                <InputSelect @bind-Value="Tecnicos.TiposTecnicosID" class="form-control" aria-label="tiposTecnicos">
+                    <option value="0">Seleccione un tipo de tecnico</option>
+                    @foreach (var item in ListaTipos)
+                    {
+                        <option value="@item.TiposTecnicosID">@item.Descripcion</option>
+                    }
+                </InputSelect> 
+                @if (ListaTipos == null || !ListaTipos.Any())
+                {
+                    <p>No hay tipos de técnicos disponibles</p>
+                }
+                else
+                {
+                    <p>Tipos de técnicos cargados: @ListaTipos.Count</p>
+                }
+            </div>
+
+            <div class="mb-3">
                 <label for="sueldoHora" class="form-label">Sueldo horas:</label>
                 <InputNumber @bind-Value="Tecnicos.SueldoHora" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.SueldoHora)" />
@@ -63,12 +82,14 @@
     public Tecnicos Tecnicos { get; set; } = new Tecnicos();
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
+    public List<TiposTecnicos> ListaTipos { get; set; } = new List<TiposTecnicos>();
 
     protected override async Task OnInitializedAsync()
     {
         if (tecnicosID.HasValue)
         {
             Tecnicos.TecnicosID = tecnicosID.Value;
+            ListaTipos = await TecnicosService.ObtenerTiposTecnicos();
             await Buscar();
         }
     }
@@ -92,26 +113,9 @@
 
     public async Task<bool> Validar()
     {
-        Nombre = Tecnicos.Nombre;
-
-        if (Nombre == Tecnicos.Nombre && tecnicosID == Tecnicos.TecnicosID)
-        {
-            ErrorMessage = string.Empty;
-            return true;
-        }
-
-        Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre) && await TecnicosService.Existe(Tecnicos.TecnicosID);
-
-
-        if (Existe)
-        {
-            ErrorMessage = "Ya existe un técnico con este Nombre o ID.";
-        }
-        else
-        {
-            ErrorMessage = string.Empty;
-        }
-
+        
+        var tecnicosList = await TecnicosService.Listar(t => t.Nombre!.ToLower() == Tecnicos.Nombre!.ToLower() && t.TecnicosID != Tecnicos.TecnicosID);
+        Existe = tecnicosList.Any();
         return !Existe;
     }
 
@@ -122,7 +126,7 @@
         {
             return;
         }
-
+        
         var guardo = await TecnicosService.Guardar(Tecnicos);
         if (guardo)
         {
@@ -142,6 +146,8 @@
     {
         NavigationManager.NavigateTo("/Tecnicos/Index");
     }
+
+   
 
 }
 
