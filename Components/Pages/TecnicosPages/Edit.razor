@@ -18,7 +18,7 @@
                     <label for="TecnicosID" class="form-label">TecnicoID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Tecnicos.TecnicosId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <InputNumber @bind-Value="Tecnicos.TecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
     {
         if (tecnicosID.HasValue)
         {
-            Tecnicos.TecnicosId = tecnicosID.Value;
+            Tecnicos.TecnicosID = tecnicosID.Value;
             await Buscar();
         }
     }
@@ -81,7 +81,7 @@
 
     public async Task Buscar()
     {
-        var tecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosId);
+        var tecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosID);
 
         if (tecnicoEncontrado != null)
         {
@@ -94,13 +94,13 @@
     {
         Nombre = Tecnicos.Nombre;
 
-        if (Nombre == Tecnicos.Nombre && tecnicosID == Tecnicos.TecnicosId)
+        if (Nombre == Tecnicos.Nombre && tecnicosID == Tecnicos.TecnicosID)
         {
             ErrorMessage = string.Empty;
             return true;
         }
 
-        Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre) && await TecnicosService.Existe(Tecnicos.TecnicosId);
+        Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre) && await TecnicosService.Existe(Tecnicos.TecnicosID);
 
 
         if (Existe)
@@ -134,7 +134,7 @@
 
     public async Task Eliminar()
     {
-        var eliminado = await TecnicosService.Eliminar(Tecnicos.TecnicosId);
+        var eliminado = await TecnicosService.Eliminar(Tecnicos.TecnicosID);
         Nuevo();
     }
 

@@ -17,7 +17,7 @@
                     <label for="TecnicosID" class="form-label">TecnicoID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Tecnicos.TecnicosId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <InputNumber @bind-Value="Tecnicos.TecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
     {
         Existe = false;
         ErrorMessage = string.Empty;
-        var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosId);
+        var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosID);
 
         if (TecnicoEncontrado != null)
         {
@@ -93,7 +93,7 @@
 
     public async Task<bool> Validar()
     {
-        Existe = await TecnicosService.Existe(Tecnicos.TecnicosId) ||
+        Existe = await TecnicosService.Existe(Tecnicos.TecnicosID) ||
                  await TecnicosService.NombreExiste(Tecnicos.Nombre);
 
 

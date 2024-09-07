@@ -47,21 +47,21 @@
             @foreach (var tecnicos in ListaTecnicos)
             {
                 <tr>
-                    <td>@tecnicos.TecnicosId</td>
+                    <td>@tecnicos.TecnicosID</td>
                     <td>@tecnicos.Nombre</td>
                     <td>@tecnicos.SueldoHora</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="/Tecnicos/Details/@tecnicos.TecnicosId">
+                        <a class="btn btn-outline-primary" href="/Tecnicos/Details/@tecnicos.TecnicosID">
                             <span class="bi bi-eye"></span>
                         </a>
                     </td>
                     <td>
-                        <a class="btn btn-outline-success" href="/Tecnicos/Edit/@tecnicos.TecnicosId">
+                        <a class="btn btn-outline-success" href="/Tecnicos/Edit/@tecnicos.TecnicosID">
                             <span class="bi bi-marker-tip"></span>
                         </a>
                     </td>
                     <td>
-                        <a class="btn btn-outline-danger" href="/Tecnicos/Delete/@tecnicos.TecnicosId">
+                        <a class="btn btn-outline-danger" href="/Tecnicos/Delete/@tecnicos.TecnicosID">
                             <span style="color: red;" class="bi bi-trash3"></span>
                         </a>
                     </td>
@@ -108,7 +108,7 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int TecnicosID))
             {
-                ListaTecnicos =  await TecnicosService.Listar(p => p.TecnicosId == TecnicosID);
+                ListaTecnicos =  await TecnicosService.Listar(p => p.TecnicosID == TecnicosID);
             }
             else if (filtro == "Nombre")
             {
