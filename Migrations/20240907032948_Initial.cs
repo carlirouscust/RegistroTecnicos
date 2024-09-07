@@ -5,7 +5,7 @@
 namespace RegistroTecnicos.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,19 @@ namespace RegistroTecnicos.Migrations
                 {
                     table.PrimaryKey("PK_Tecnicos", x => x.TecnicosID);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "TiposTecnicos",
+                columns: table => new
+                {
+                    TiposTecnicosID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TiposTecnicos", x => x.TiposTecnicosID);
+                });
         }
 
         /// <inheritdoc />
@@ -30,6 +43,9 @@ namespace RegistroTecnicos.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Tecnicos");
+
+            migrationBuilder.DropTable(
+                name: "TiposTecnicos");
         }
     }
 }
