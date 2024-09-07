@@ -63,11 +63,11 @@ public class TecnicosService
 
     public async Task<List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
     {
-        return _context.Tecnicos.
+        return await _context.Tecnicos.
             AsNoTracking()
             .Include(T => T.tiposTecnicos)
             .Where(criterio)
-            .ToList();
+            .ToListAsync();
     }
     public async Task<List<TiposTecnicos>> ObtenerTiposTecnicos()
     {
