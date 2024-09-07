@@ -17,13 +17,13 @@ public class TecnicosService
     public async Task<bool> Existe(int tecnicosID)
     {
         return await _context.Tecnicos
-            .AnyAsync(p => p.TecnicosID == tecnicosID);
+            .AnyAsync(T => T.TecnicosID == tecnicosID);
     }
 
     public async Task<bool> NombreExiste(string? Nombre = null)
     {
         return await _context.Tecnicos
-            .AnyAsync(p => p.Nombre == Nombre);
+            .AnyAsync(T => T.Nombre == Nombre);
     }
 
 
@@ -50,7 +50,7 @@ public class TecnicosService
     public async Task<bool> Eliminar(int id)
     {
         var tecnicos = await _context.Tecnicos.
-            Where(P => P.TecnicosID == id).ExecuteDeleteAsync();
+            Where(T => T.TecnicosID == id).ExecuteDeleteAsync();
         return tecnicos > 0;
     }
 
@@ -58,15 +58,20 @@ public class TecnicosService
     {
         return await _context.Tecnicos.
             AsNoTracking()
-            .FirstOrDefaultAsync(P => P.TecnicosID == id);
+            .FirstOrDefaultAsync(T => T.TecnicosID == id);
     }
 
     public async Task<List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
     {
         return _context.Tecnicos.
             AsNoTracking()
+            .Include(T => T.tiposTecnicos)
             .Where(criterio)
             .ToList();
+    }
+    public async Task<List<TiposTecnicos>> ObtenerTiposTecnicos()
+    {
+        return await _context.TiposTecnicos.ToListAsync();
     }
 
 }
