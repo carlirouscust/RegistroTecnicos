@@ -85,11 +85,11 @@
     public List<TiposTecnicos> ListaTipos { get; set; } = new List<TiposTecnicos>();
 
     protected override async Task OnInitializedAsync()
-    {
+    {       
         if (tecnicosID.HasValue)
         {
             Tecnicos.TecnicosID = tecnicosID.Value;
-            ListaTipos = await TecnicosService.ObtenerTiposTecnicos();
+            ListaTipos = await TecnicosService.ObtenerTiposTecnicos();            
             await Buscar();
         }
     }
