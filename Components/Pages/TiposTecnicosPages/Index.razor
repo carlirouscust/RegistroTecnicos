@@ -1,0 +1,121 @@
+﻿@page "/TiposTecnicos/Index"
+@inject TiposTecnicosService TiposTecnicosService
+@rendermode InteractiveServer
+
+<EditForm Model="ListaTiposTecnicos" class="border shadow-lg p-3 rounded">
+    <Toasts class="p-3" Messages="messages" Placement="ToastsPlacement.TopRight" />
+
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Tipos Tecnicos</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="Descripcion">Descripcion</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3 text-end">
+                <a href="/TiposTecnicos/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>TipoTecnicoID</th>
+                <th>Descripcion</th>                              
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tiposTecnicos in ListaTiposTecnicos)
+            {
+                <tr>
+                    <td>@tiposTecnicos.TiposTecnicosID</td>
+                    <td>@tiposTecnicos.Descripcion</td>                   
+                    <td>
+                        <a class="btn btn-outline-primary" href="/TiposTecnicos/Details/@tiposTecnicos.TiposTecnicosID">
+                            <span class="bi bi-eye"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-success" href="/TiposTecnicos/Edit/@tiposTecnicos.TiposTecnicosID">
+                            <span class="bi bi-marker-tip"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-danger" href="/TiposTecnicos/Delete/@tiposTecnicos.TiposTecnicosID">
+                            <span style="color: red;" class="bi bi-trash3"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</EditForm>
+
+@code {
+    public TiposTecnicos TiposTecnicos = new TiposTecnicos();
+
+    public List<TiposTecnicos> ListaTiposTecnicos = new List<TiposTecnicos>();
+
+    List<ToastMessage> messages = new List<ToastMessage>();
+
+    private string filtro = "Id";
+    private string valorFiltro = "";
+
+    private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
+
+    private ToastMessage CreateToastMessage(ToastType toastType)
+      => new ToastMessage
+          {
+              Type = toastType,
+              Title = "Blazor Bootstrap",
+              HelpText = $"{DateTime.Now}",
+              Message = $"Hello, world! This is a toast message. DateTime: {DateTime.Now}",
+          };
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTiposTecnicos = await TiposTecnicosService.Listar(c => true);
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await TiposTecnicosService.Guardar(TiposTecnicos);
+    }
+
+    private async Task Buscar()
+    {
+        if (valorFiltro.Trim() != "")
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int tiposTecnicosID))
+            {
+                ListaTiposTecnicos = await TiposTecnicosService.Listar(p => p.TiposTecnicosID == tiposTecnicosID);
+            }
+            else if (filtro == "Nombre")
+            {
+                ListaTiposTecnicos = await TiposTecnicosService.Listar(p => p.Descripcion == valorFiltro);
+            }
+        }
+        else
+        {
+            ListaTiposTecnicos = await TiposTecnicosService.Listar(p => true);
+        }
+    }
+}
