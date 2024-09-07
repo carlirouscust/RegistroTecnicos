@@ -30,6 +30,15 @@
                 <ValidationMessage For="@(() => Tecnicos.Nombre)" />
             </div>
 
+            @* TiposTecnicos*@
+            <label for="TiposTecnicos" class="form-label">Tipos de tecnicos:</label>
+            <select class="form-select" aria-label="TiposTecnicos">               
+                <option selected>Seleccione un tipo de tecnico</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+
             @* SueldoHora *@
             <div class="mb-3">
                 <label for="sueldoHora" class="form-label">Sueldo Por Horas:</label>
