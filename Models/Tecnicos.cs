@@ -11,4 +11,6 @@ public class Tecnicos
     public string? Nombre { get; set; }
     [Required(ErrorMessage = "El campo es obligatorio")]
     public int? SueldoHora { get; set; }
+
+    public TiposTecnicos? tiposTecnicos { get; set; }
 }
