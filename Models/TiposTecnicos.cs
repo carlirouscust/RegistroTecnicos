@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RegistroTecnicos.Models;
 
@@ -9,5 +10,7 @@ public class TiposTecnicos
     [Required(ErrorMessage = "El campo es obligatorio")]
 
     public string? Descripcion { get; set; }
-    
+
+    public ICollection<Tecnicos>? Tecnicos { get; set; }
+
 }
