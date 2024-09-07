@@ -86,20 +86,10 @@
 
     public async Task<bool> Validar()
     {
-        // Existe = await TecnicosService.Existe(Tecnicos.TecnicosID) ||
-        //          await TecnicosService.NombreExiste(Tecnicos.Nombre);
-
-
-        if (Existe)
-        {
-            ErrorMessage = "Ya existe un técnico con este ID o nombre.";
-        }
-        else
-        {
-            ErrorMessage = string.Empty;
-        }
-
-        return !Existe;
+        bool descripcionExiste = await TiposTecnicosService.DescripcionExiste(TiposTecnicos.Descripcion) ||
+                                 await TiposTecnicosService.Existe(TiposTecnicos.TiposTecnicosID);
+        ErrorMessage = "AAAAAAAAAA";                       
+        return !descripcionExiste;
     }
 
     public async Task Guardar()
