@@ -11,7 +11,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240907174754_Inicial")]
+    [Migration("20240907210828_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
