@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace RegistroTecnicos.Models;
 
@@ -13,4 +15,8 @@ public class Tecnicos
     public int? SueldoHora { get; set; }
 
     public TiposTecnicos? tiposTecnicos { get; set; }
+
+    [ForeignKey("tiposTecnicos")]
+    public int TiposTecnicosID { get; set; }
+
 }
