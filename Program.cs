@@ -25,7 +25,8 @@ public class Program
 
         builder.Services.AddScoped<TecnicosService>();
 
-       
+        builder.Services.AddScoped<TiposTecnicosService>();
+
 
         var app = builder.Build();
 
