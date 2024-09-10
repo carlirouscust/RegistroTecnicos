@@ -10,14 +10,17 @@
     </div>
     <div class="card-body">
         
+        @*Filtro*@
         <div class="row mb-3 align-items-end">
             <div class="col-md-3">
                 <label for="Filtro" class="form-label">Filtrar por:</label>
                 <select @bind="filtro" class="form-select">
                     <option value="id">ID</option>
                     <option value="Nombre">Nombre</option>
+                    <option value="Tipo">Tipo Tecnico</option>
                 </select>
             </div>
+            @*Boton buscar*@
             <div class="col-md-6">
                 <label for="ValorFiltro" class="form-label">Búsqueda:</label>
                 <div class="input-group">
@@ -27,11 +30,13 @@
                     </button>
                 </div>
             </div>
+            @*Boton crear*@
             <div class="col-md-3 text-end">
                 <a href="/Tecnicos/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
             </div>
         </div>
     </div>
+    @*Tabla tecnicos*@
     <table class="table table-bordered text-center">
         <thead class="bg-primary text-white">
             <tr>
@@ -115,6 +120,11 @@
             else if (filtro == "Nombre")
             {
                 ListaTecnicos = await TecnicosService.Listar(p => p.Nombre == valorFiltro);
+            }
+            if (filtro == "Tipo")
+            {
+                string filtroMinuscula = valorFiltro.ToLower();
+                ListaTecnicos = await TecnicosService.Listar(T => T.tiposTecnicos == null || T.tiposTecnicos.Descripcion.ToLower().Contains(filtroMinuscula));
             }
         }
         else
