@@ -11,14 +11,33 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240907210828_Inicial")]
-    partial class Inicial
+    [Migration("20240910234153_ClientesService")]
+    partial class ClientesService
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Clientes", b =>
+                {
+                    b.Property<int>("ClientesID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WhatsApp")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ClientesID");
+
+                    b.ToTable("Clientes");
+                });
 
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>
                 {
