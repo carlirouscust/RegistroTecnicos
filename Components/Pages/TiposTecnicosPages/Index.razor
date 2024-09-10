@@ -108,7 +108,7 @@
             {
                 ListaTiposTecnicos = await TiposTecnicosService.Listar(p => p.TiposTecnicosID == tiposTecnicosID);
             }
-            else if (filtro == "Nombre")
+            else if (filtro == "Descripcion")
             {
                 ListaTiposTecnicos = await TiposTecnicosService.Listar(p => p.Descripcion == valorFiltro);
             }
