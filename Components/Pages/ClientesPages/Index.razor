@@ -1,0 +1,133 @@
+﻿@page "/Clientes/Index"
+@inject ClientesService ClientesService
+@rendermode InteractiveServer
+
+<EditForm Model="ListaClientes" class="border shadow-lg p-3 rounded">
+    <Toasts class="p-3" Messages="messages" Placement="ToastsPlacement.TopRight" />
+
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Clientes</h3>
+    </div>
+    <div class="card-body">
+
+        @*Filtro*@
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="Nombre">Nombre</option>
+                    <option value="Tipo">WhatsApp</option>
+                </select>
+            </div>
+            @*Boton buscar*@
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            @*Boton crear*@
+            <div class="col-md-3 text-end">
+                <a href="/Tecnicos/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+    @*Tabla tecnicos*@
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>ClientesID</th>
+                <th>Nombre</th>
+                <th>WhatsApp</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var clientes in ListaClientes)
+            {
+                <tr>
+                    <td>@Clientes.ClientesID</td>
+                    <td>@Clientes.Nombre</td>
+                    <td>@Clientes.WhatsApp?</td>                  
+                    <td>
+                        <a class="btn btn-outline-primary" href="/Tecnicos/Details/@clientes.ClientesID">
+                            <span class="bi bi-eye"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-success" href="/Tecnicos/Edit/@clientes.ClientesID">
+                            <span class="bi bi-marker-tip"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-danger" href="/Tecnicos/Delete/@clientes.ClientesID">
+                            <span style="color: red;" class="bi bi-trash3"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</EditForm>
+
+@code {
+    public Clientes Clientes = new Clientes();
+
+    public List<Clientes> ListaClientes = new List<Clientes>();
+
+    List<ToastMessage> messages = new List<ToastMessage>();
+
+    private string filtro = "Id";
+    private string valorFiltro = "";
+
+    private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
+
+    private ToastMessage CreateToastMessage(ToastType toastType)
+      => new ToastMessage
+          {
+              Type = toastType,
+              Title = "Blazor Bootstrap",
+              HelpText = $"{DateTime.Now}",
+              Message = $"Hello, world! This is a toast message. DateTime: {DateTime.Now}",
+          };
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await ClientesService.Listar(c => true);
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await ClientesService.Guardar(Clientes);
+    }
+
+    private async Task Buscar()
+    {
+        if (valorFiltro.Trim() != "")
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int ClientesID))
+            {
+                ListaClientes = await ClientesService.Listar(T => T.ClientesID == ClientesID);
+            }
+            else if (filtro == "Nombre")
+            {
+                ListaClientes = await ClientesService.Listar(T => T.Nombre == valorFiltro);
+            }
+            if (filtro == "Whatsapp")
+            {
+                ListaClientes = await ClientesService.Listar(T => T.WhatsApp == null);
+            }
+        }
+        else
+        {
+            ListaClientes = await ClientesService.Listar(p => true);
+        }
+    }
+}
+
