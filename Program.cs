@@ -29,6 +29,8 @@ public class Program
 
         builder.Services.AddScoped<ClientesService>();
 
+        builder.Services.AddScoped<TrabajosService>();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
