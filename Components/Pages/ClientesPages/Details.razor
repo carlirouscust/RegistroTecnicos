@@ -1,5 +1,58 @@
-﻿<h3>Details</h3>
+﻿@page "/Clientes/Details/{clientesID:int}"
+@inject ClientesService ClientesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalles de Tecnicos</PageTitle>
+
+@if (Clientes != null)
+
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3 class="text-center"><strong>Detalles de los Clientes</strong></h3>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>ClienteID:</strong> @Clientes.ClientesID</li>
+                                <li><strong>Nombre:</strong> @Clientes.Nombre</li>
+                                <li><strong>WhatsApp:</strong> @Clientes.WhatsApp</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+        </div>
+    </div>
+}
+
+else
+
+{
+    <p>Cliente no encontrado.</p>
+}
 
 @code {
+    [Parameter]
+    public int ClientesID { get; set; }
+    public Clientes? Clientes { get; set; } = new Clientes();
 
+    protected override async Task OnInitializedAsync()
+    {
+        Clientes = await ClientesService.Buscar(ClientesID);
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Clientes/Index");
+    }
 }
