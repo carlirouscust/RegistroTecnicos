@@ -75,6 +75,39 @@ namespace RegistroTecnicos.Migrations
                     b.ToTable("TiposTecnicos");
                 });
 
+            modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>
+                {
+                    b.Property<int>("TrabajosID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ClientesID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Fecha")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Monto")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TecnicosID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TrabajosID");
+
+                    b.HasIndex("ClientesID");
+
+                    b.HasIndex("TecnicosID");
+
+                    b.ToTable("Trabajos");
+                });
+
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>
                 {
                     b.HasOne("RegistroTecnicos.Models.TiposTecnicos", "tiposTecnicos")
@@ -84,6 +117,25 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired();
 
                     b.Navigation("tiposTecnicos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>
+                {
+                    b.HasOne("RegistroTecnicos.Models.Clientes", "clientes")
+                        .WithMany()
+                        .HasForeignKey("ClientesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroTecnicos.Models.Tecnicos", "tecnicos")
+                        .WithMany()
+                        .HasForeignKey("TecnicosID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("clientes");
+
+                    b.Navigation("tecnicos");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.TiposTecnicos", b =>
