@@ -95,6 +95,11 @@
 
     public async Task<bool> Validar()
     {
+        if (string.IsNullOrWhiteSpace(Clientes.WhatsApp) || Clientes.WhatsApp.Length != 10)
+        {
+            ErrorMessage = "El numero no es valido";
+            return false;
+        }
 
         var clientesList = await ClientesService.Listar(t => t.Nombre!.ToLower() == Clientes.Nombre!.ToLower() && t.ClientesID != Clientes.ClientesID);
         Existe = clientesList.Any();
