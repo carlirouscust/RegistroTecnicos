@@ -1,0 +1,134 @@
+﻿@page "/Clientes/Edit/{ClientesID:int}"
+@inject ClientesService ClientesService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="Clientes" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Editar Clientes</h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label for="ClientesID" class="form-label">ClientesID:</label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1em;">
+                            <InputNumber @bind-Value="Clientes.ClientesID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="Nombre" class="form-label">Nombre:</label>
+                <InputText @bind-Value="Clientes.Nombre" class="form-control" />
+                <ValidationMessage For="@(() => Clientes.Nombre)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="WhatsApp" class="form-label">WhatsApp:</label>
+                <InputText @bind-Value="Clientes.WhatsApp" class="form-control" />
+                <ValidationMessage For="@(() => Clientes.WhatsApp)" />
+            </div>
+           
+        </div>
+
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @ErrorMessage
+            </div>
+        }
+
+        <div class="card-footer bg-light d-flex justify-content-center mt-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+                <a type="button" href="/Clientes/Index" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int? ClientesID { get; set; }
+    public string? Nombre { get; set; }
+    public Clientes Clientes { get; set; } = new Clientes();
+    private bool Existe = false;
+    private string ErrorMessage { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ClientesID.HasValue)
+        {
+            Clientes.ClientesID = ClientesID.Value;
+            await Buscar();
+        }
+    }
+
+    public void Nuevo()
+    {
+        Clientes = new Clientes();
+        Existe = false;
+    }
+
+    public async Task Buscar()
+    {
+        var clienteEncontrado = await ClientesService.Buscar(Clientes.ClientesID);
+
+        if (clienteEncontrado != null)
+        {
+            Clientes = clienteEncontrado;
+        }
+    }
+
+
+    public async Task<bool> Validar()
+    {
+
+        var clientesList = await ClientesService.Listar(t => t.Nombre!.ToLower() == Clientes.Nombre!.ToLower() && t.ClientesID != Clientes.ClientesID);
+        Existe = clientesList.Any();
+        return !Existe;
+    }
+
+
+    public async Task Guardar()
+    {
+        if (!await Validar())
+        {
+            return;
+        }
+
+        var guardo = await ClientesService.Guardar(Clientes);
+        if (guardo)
+        {
+            Volver();
+        }
+
+
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminado = await ClientesService.Eliminar(Clientes.ClientesID);
+        Nuevo();
+    }
+
+    public void Volver()
+    {
+        NavigationManager.NavigateTo("/Clientes/Index");
+    }
+
+
+
+}
+
+
