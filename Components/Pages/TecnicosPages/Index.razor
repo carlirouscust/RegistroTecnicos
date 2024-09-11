@@ -117,11 +117,11 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int TecnicosID))
             {
-                ListaTecnicos =  await TecnicosService.Listar(p => p.TecnicosID == TecnicosID);
+                ListaTecnicos =  await TecnicosService.Listar(T => T.TecnicosID == TecnicosID);
             }
             else if (filtro == "Nombre")
             {
-                ListaTecnicos = await TecnicosService.Listar(p => p.Nombre == valorFiltro);
+                ListaTecnicos = await TecnicosService.Listar(T => T.Nombre == valorFiltro);
             }
             if (filtro == "Tipo")
             {
@@ -131,7 +131,7 @@
         }
         else
         {
-            ListaTecnicos = await TecnicosService.Listar(p => true);
+            ListaTecnicos = await TecnicosService.Listar(T => true);
         }
     }
 }
