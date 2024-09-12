@@ -1,0 +1,162 @@
+﻿@page "/Trabajos/Create"
+@inject TrabajosService TrabajosService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Registro de Trabajos</PageTitle>
+
+<EditForm Model="Trabajos" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Registro de Trabajos</h3>
+        </div>
+
+        <div class="card-body">
+            @* TrabajosID *@
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="TrabajosID" class="form-label">TrabajoID:</label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1em;">
+                            <InputNumber @bind-Value="Trabajos.TrabajosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Fecha Creado *@
+            <div class="mb-3">
+                <label for="Fecha" class="form-label">Fecha:</label>
+                <InputText @bind-Value="Trabajos.Fecha" class="form-control" />
+                <ValidationMessage For="@(() => Trabajos.Fecha)" />
+            </div>
+
+            @* Cliente *@
+            <div class="mb-3">
+                <label for="Clientes" class="form-label">Cliente:</label>
+                <InputSelect @bind-Value="Trabajos.ClientesID" class="form-control" aria-label="ClientesID">
+                    <option value="0">Seleccione un tipo de tecnico</option>
+                    @foreach (var item in ListaClientes)
+                    {
+                        <option value="@item.ClientesID">@item.Nombre</option>
+                    }
+                </InputSelect>
+                @if (ListaClientes == null || !ListaClientes.Any())
+                {
+                    <p>No hay clientes disponibles</p>
+                }
+                else
+                {
+                    <p>clientes cargados: @ListaClientes.Count</p>
+                }
+
+            </div>
+
+            @* Descripcion *@
+            <div class="mb-3">
+                <label for="Descripcion" class="form-label">Descripcion:</label>
+                <InputText @bind-Value="Trabajos.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => Trabajos.Descripcion)" />
+            </div>
+        </div>
+
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @ErrorMessage
+            </div>
+        }
+
+        <div class="card-footer bg-light d-flex justify-content-center mt-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+                <a type="button" href="/Trabajos/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+
+
+
+@code {
+    [Parameter]
+    public int TrabajosID { get; set; }
+    public Trabajos Trabajos { get; set; } = new Trabajos();
+    private bool Existe = false;
+    private string ErrorMessage { get; set; } = string.Empty;
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await TrabajosService.ObtenerClientes();
+    }
+
+    public void Nuevo()
+    {
+        Trabajos = new Trabajos();
+        Existe = false;
+        ErrorMessage = string.Empty;
+    }
+
+    public async Task Buscar()
+    {
+        Existe = false;
+        ErrorMessage = string.Empty;
+        var TrabajoEncontrado = await TrabajosService.Buscar(Trabajos.TrabajosID);
+
+        if (TrabajoEncontrado != null)
+        {
+            Trabajos = TrabajoEncontrado;
+        }
+        else
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        Existe = await TrabajosService.Existe(Trabajos.TrabajosID);
+
+
+        if (Existe)
+        {
+            ErrorMessage = "Ya existe un técnico con este ID o nombre.";
+        }
+        else
+        {
+            ErrorMessage = string.Empty;
+        }
+
+        return !Existe;
+    }
+
+    public async Task Guardar()
+    {
+
+        if (!await Validar())
+        {
+            return;
+        }
+
+        var guardo = await TrabajosService.Guardar(Trabajos);
+        if (guardo)
+        {
+            Nuevo();
+            Volver();
+        }
+    }
+
+    public void Volver()
+    {
+        NavigationManager.NavigateTo("/Trabajos/Index");
+    }
+
+}
+
+
