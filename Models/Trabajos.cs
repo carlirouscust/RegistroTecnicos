@@ -13,7 +13,7 @@ public class Trabajos
     public string? Fecha { get; set; }
 
     [Required(ErrorMessage = "El campo es obligatorio")]
-    public int? Descripcion { get; set; }
+    public string? Descripcion { get; set; }
 
     [Required(ErrorMessage = "El campo es obligatorio")]
     public int? Monto { get; set; }
