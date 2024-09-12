@@ -59,6 +59,13 @@
                 <InputText @bind-Value="Trabajos.Descripcion" class="form-control" />
                 <ValidationMessage For="@(() => Trabajos.Descripcion)" />
             </div>
+
+            @* Monto *@
+            <div class="mb-3">
+                <label for="Monto" class="form-label">Monto:</label>
+                <InputNumber @bind-Value="Trabajos.Monto" class="form-control" />
+                <ValidationMessage For="@(() => Trabajos.Monto)"/>
+            </div>
         </div>
 
 
@@ -90,10 +97,12 @@
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
     public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
 
     protected override async Task OnInitializedAsync()
     {
         ListaClientes = await TrabajosService.ObtenerClientes();
+        ListaTecnicos = await TrabajosService.ObtenerTecnicos();
     }
 
     public void Nuevo()
