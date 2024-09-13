@@ -51,15 +51,19 @@ public class TrabajosService
     {
         return await _context.Trabajos.
             AsNoTracking()
+            .Include(T => T.tecnicos)
+            .Include(T => T.clientes)
             .FirstOrDefaultAsync(T => T.TrabajosID == id);
     }
 
     public async Task<List<Trabajos>> Listar(Expression<Func<Trabajos, bool>> criterio)
     {
-        return _context.Trabajos.
+        return await _context.Trabajos.
             AsNoTracking()
+            .Include(T => T.tecnicos)
+            .Include(T => T.clientes)
             .Where(criterio)
-            .ToList();
+            .ToListAsync();    // CAmbios aquio
     }
     public async Task<List<Clientes>> ObtenerClientes()
     {
@@ -70,4 +74,10 @@ public class TrabajosService
     {
         return await _context.Tecnicos.ToListAsync();
     }
+
+    public async Task<List<TiposTecnicos>> ObtenerTiposTecnicos()
+    {
+        return await _context.TiposTecnicos.ToListAsync();
+    }
+
 }
