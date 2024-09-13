@@ -34,7 +34,7 @@ public class TrabajosService
 
     public async Task<bool> Guardar(Trabajos trabajos)
     {
-        if (!await Existe(trabajos.TrabajosID))
+        if (await Existe(trabajos.TrabajosID))
             return await Insertar(trabajos);
         else
             return await Modificar(trabajos);
@@ -56,14 +56,14 @@ public class TrabajosService
             .FirstOrDefaultAsync(T => T.TrabajosID == id);
     }
 
-    public async Task<List<Trabajos>> Listar(Expression<Func<Trabajos, bool>> criterio)
+    public List<Trabajos> Listar(Expression<Func<Trabajos,bool>> criterio)
     {
-        return await _context.Trabajos.
+        return _context.Trabajos.
             AsNoTracking()
             .Include(T => T.tecnicos)
             .Include(T => T.clientes)
             .Where(criterio)
-            .ToListAsync();    // CAmbios aquio
+            .ToList();    // CAmbios aquio
     }
     public async Task<List<Clientes>> ObtenerClientes()
     {
