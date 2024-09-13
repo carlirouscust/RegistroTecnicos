@@ -138,12 +138,6 @@
 
     }
 
-    public async Task Eliminar()
-    {
-        var eliminado = await TecnicosService.Eliminar(Tecnicos.TecnicosID);
-        Nuevo();
-    }
-
     public void Volver()
     {
         NavigationManager.NavigateTo("/Tecnicos/Index");
