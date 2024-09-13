@@ -58,9 +58,9 @@
             {
                 <tr>
                     <td>@trabajos.TrabajosID</td>
-                    <td>@trabajos.Fecha.ToString("dd/MM/yyyy")</td>
-                    <td>@trabajos.clientes?.Nombre</td>
-                    <td>@trabajos.tecnicos?.Nombre</td>
+                    <td>@trabajos.Fecha</td>
+                    <td>@trabajos.ClientesID</td>
+                    <td>@trabajos.TecnicosID</td>
                     <td>@trabajos.Descripcion</td>
                     <td>@trabajos.Monto</td>
                     <td>
@@ -108,6 +108,10 @@
         ListaTrabajos = await TrabajosService.Listar(c => true);
     }
 
+    public async Task Guardar()
+    {
+        var guardo = await TrabajosService.Guardar(trabajos);
+    }
 
     private async Task Buscar()
     {
@@ -119,7 +123,7 @@
             }
             else if (filtro == "Fecha")
             {
-                //ListaTrabajos = await TrabajosService.Listar(T => T.Fecha == valorFiltro);
+                ListaTrabajos = await TrabajosService.Listar(T => T.Fecha == valorFiltro);
             }
             if (filtro == "Descripcion")
             {
