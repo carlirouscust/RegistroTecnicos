@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -64,8 +65,8 @@ namespace RegistroTecnicos.Migrations
                 {
                     TrabajosID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Fecha = table.Column<string>(type: "TEXT", nullable: false),
-                    Descripcion = table.Column<int>(type: "INTEGER", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
                     Monto = table.Column<int>(type: "INTEGER", nullable: false),
                     TecnicosID = table.Column<int>(type: "INTEGER", nullable: false),
                     ClientesID = table.Column<int>(type: "INTEGER", nullable: false)
