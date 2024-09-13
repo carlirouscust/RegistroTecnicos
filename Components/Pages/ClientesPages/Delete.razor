@@ -46,7 +46,7 @@
             </div>
             <!-- Footer -->
             <div class="card-footer">
-                <button type="button" class="btn btn-outline-danger" @onclick="EliminarTecnico"><i class="bi bi-trash-fill"></i> Eliminar</button>
+                <button type="button" class="btn btn-outline-danger" @onclick="EliminarCliente"><i class="bi bi-trash-fill"></i> Eliminar</button>
                 <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
             </div>
         </div>
@@ -70,7 +70,7 @@ else
         }
     }
 
-    public async Task EliminarTecnico()
+    public async Task EliminarCliente()
     {
         if (ClientesID == 0 || Clientes == null)
         {
