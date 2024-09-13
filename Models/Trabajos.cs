@@ -10,7 +10,7 @@ public class Trabajos
     public int TrabajosID { get; set; }
 
     [Required(ErrorMessage = "El campo es obligatorio")]
-    public string? Fecha { get; set; }
+    public DateTime Fecha { get; set; } = DateTime.Now;
 
     [Required(ErrorMessage = "El campo es obligatorio")]
     public string? Descripcion { get; set; }
