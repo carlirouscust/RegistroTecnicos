@@ -84,9 +84,9 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int>("ClientesID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Descripcion")
+                    b.Property<int?>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Fecha")
                         .IsRequired()
@@ -95,12 +95,6 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int?>("Monto")
                         .IsRequired()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("NombreClientes")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NombreTecnicos")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("TecnicosID")
                         .HasColumnType("INTEGER");
