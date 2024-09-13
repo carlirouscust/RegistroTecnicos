@@ -14,21 +14,19 @@
 
         <div class="card-body">
             @* TrabajosID *@
-            <div class="row">
-                <div class="col-md-6 mb-3">
+            <div class="col">
+                <div class="col-md-3 mb-3">
                     <label for="TrabajosID" class="form-label">TrabajoID:</label>
                     <div class="input-group">
-                        <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Trabajos.TrabajosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
-                        </div>
+                        <InputNumber @bind-Value="Trabajos.TrabajosID" class="form-control" aria-describedby="BotonBuscar" />
                     </div>
                 </div>
             </div>
 
             @* Fecha Creado *@
-            <div class="mb-3">
+            <div class="col-md-3 mb-3">
                 <label for="Fecha" class="form-label">Fecha:</label>
-                <InputText @bind-Value="Trabajos.Fecha" class="form-control" />
+                <InputDate @bind-Value="Trabajos.Fecha" class="form-control" />
                 <ValidationMessage For="@(() => Trabajos.Fecha)" />
             </div>
 
@@ -53,6 +51,27 @@
 
             </div>
 
+            @* Tecnico *@
+            <div class="mb-3">
+                <label for="Tecnico" class="form-label">Tecnico:</label>
+                <InputSelect @bind-Value="Trabajos.TecnicosID" class="form-control" aria-label="TecnicosID">
+                    <option value="0">Seleccione un tecnico</option>
+                    @foreach (var item in ListaTecnicos)
+                    {
+                        <option value="@item.TecnicosID">@item.Nombre (@item.TiposTecnicosID)</option>
+                    }
+                </InputSelect>
+                @if (ListaTecnicos == null || !ListaTecnicos.Any())
+                {
+                    <p>No hay clientes disponibles</p>
+                }
+                else
+                {
+                    <p>clientes cargados: @ListaTecnicos.Count</p>
+                }
+
+            </div>
+
             @* Descripcion *@
             <div class="mb-3">
                 <label for="Descripcion" class="form-label">Descripcion:</label>
@@ -64,7 +83,7 @@
             <div class="mb-3">
                 <label for="Monto" class="form-label">Monto:</label>
                 <InputNumber @bind-Value="Trabajos.Monto" class="form-control" />
-                <ValidationMessage For="@(() => Trabajos.Monto)"/>
+                <ValidationMessage For="@(() => Trabajos.Monto)" />
             </div>
         </div>
 
@@ -167,5 +186,4 @@
     }
 
 }
-
 
