@@ -18,7 +18,7 @@
                 <label for="Filtro" class="form-label">Filtrar por:</label>
                 <select @bind="filtro" class="form-select">
                     <option value="id">ID</option>
-                    <option value="Cliente">Cliente</option>
+                    <option value="Clientes">Cliente</option>
                 </select>
             </div>
             @*Boton buscar*@
@@ -118,7 +118,7 @@
             }
             else if (filtro == "Clientes")
             {
-                ListaTrabajos = TrabajosService.Listar(T => T.clientes.Nombre == valorFiltro);
+                ListaTrabajos = TrabajosService.Listar(T => T.clientes != null && T.clientes.Nombre == valorFiltro);
             }            
             else
             {
