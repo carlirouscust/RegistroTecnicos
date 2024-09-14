@@ -18,8 +18,7 @@
                 <label for="Filtro" class="form-label">Filtrar por:</label>
                 <select @bind="filtro" class="form-select">
                     <option value="id">ID</option>
-                    <option value="Fecha">Fecha</option>
-                    <option value="Descripcion">Tipo Tecnico</option>
+                    <option value="Cliente">Cliente</option>
                 </select>
             </div>
             @*Boton buscar*@
@@ -117,18 +116,14 @@
             {
                 ListaTrabajos = TrabajosService.Listar(T => T.TrabajosID == trabajosID);
             }
-            else if (filtro == "Fecha")
+            else if (filtro == "Clientes")
             {
-                //ListaTrabajos = await TrabajosService.Listar(T => T.Fecha == valorFiltro);
-            }
-            if (filtro == "Descripcion")
+                ListaTrabajos = TrabajosService.Listar(T => T.clientes.Nombre == valorFiltro);
+            }            
+            else
             {
-                ListaTrabajos = TrabajosService.Listar(T => T.Descripcion == null);
-            }
-        }
-        else
-        {
             ListaTrabajos = TrabajosService.Listar(T => true);
+            }
         }
-    }
+  }
 }
