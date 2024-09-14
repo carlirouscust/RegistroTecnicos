@@ -39,15 +39,7 @@
                     {
                         <option value="@item.ClientesID">@item.Nombre</option>
                     }
-                </InputSelect>
-                @if (ListaClientes == null || !ListaClientes.Any())
-                {
-                    <p>No hay clientes disponibles</p>
-                }
-                else
-                {
-                    <p>clientes cargados: @ListaClientes.Count</p>
-                }
+                </InputSelect>             
 
             </div>
 
@@ -60,15 +52,7 @@
                     {
                         <option value="@item.TecnicosID">@item.Nombre (@item.TiposTecnicosID)</option>
                     }
-                </InputSelect>
-                @if (ListaTecnicos == null || !ListaTecnicos.Any())
-                {
-                    <p>No hay clientes disponibles</p>
-                }
-                else
-                {
-                    <p>clientes cargados: @ListaTecnicos.Count</p>
-                }
+                </InputSelect>               
 
             </div>
 
