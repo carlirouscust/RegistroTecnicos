@@ -17,20 +17,20 @@ public class TecnicosService
     public async Task<bool> Existe(int tecnicosID)
     {
         return await _context.Tecnicos
-            .AnyAsync(p => p.TecnicosId == tecnicosID);
+            .AnyAsync(T => T.TecnicosID == tecnicosID);
     }
 
     public async Task<bool> NombreExiste(string? Nombre = null)
     {
         return await _context.Tecnicos
-            .AnyAsync(p => p.Nombre == Nombre);
+            .AnyAsync(T => T.Nombre == Nombre);
     }
 
 
     public async Task<bool> Insertar(Tecnicos tecnicos)
     {
         _context.Tecnicos.Add(tecnicos);
-        return await _context.SaveChangesAsync() > 0; 
+        return await _context.SaveChangesAsync() > 0;
     }
 
     public async Task<bool> Modificar(Tecnicos tecnicos)
@@ -41,7 +41,7 @@ public class TecnicosService
 
     public async Task<bool> Guardar(Tecnicos tecnicos)
     {
-        if (!await Existe(tecnicos.TecnicosId))
+        if (!await Existe(tecnicos.TecnicosID))
             return await Insertar(tecnicos);
         else
             return await Modificar(tecnicos);
@@ -50,7 +50,7 @@ public class TecnicosService
     public async Task<bool> Eliminar(int id)
     {
         var tecnicos = await _context.Tecnicos.
-            Where(P => P.TecnicosId == id).ExecuteDeleteAsync();
+            Where(T => T.TecnicosID == id).ExecuteDeleteAsync();
         return tecnicos > 0;
     }
 
@@ -58,16 +58,20 @@ public class TecnicosService
     {
         return await _context.Tecnicos.
             AsNoTracking()
-            .FirstOrDefaultAsync(P => P.TecnicosId == id);
+            .FirstOrDefaultAsync(T => T.TecnicosID == id);
     }
 
-    public async Task <List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
+    public async Task<List<Tecnicos>> Listar(Expression<Func<Tecnicos, bool>> criterio)
     {
-        return _context.Tecnicos.
+        return await _context.Tecnicos.
             AsNoTracking()
+            .Include(T => T.tiposTecnicos)
             .Where(criterio)
-            .ToList();
+            .ToListAsync();
     }
-     //COmentario
+    public async Task<List<TiposTecnicos>> ObtenerTiposTecnicos()
+    {
+        return await _context.TiposTecnicos.ToListAsync();
+    }
 
 }

@@ -5,3 +5,37 @@
 <h1>Bienvenido al Registro de Tecnicos</h1>
 
 Una app para facilitar el registro de los tecnicos de tu empresa.
+
+@* <div class="col-md-3 text-start">
+    <a href=@($"https://wa.me/{numero}?text={mensaje}%20{ObtenerFecha()}%20 a las%20{ObtenerHora()}") class="btn btn-success" type="button" target="_blank" rel="noopener noreferrer">
+        <span class="bi bi-whatsapp"></span> Finalizar
+    </a>
+</div> *@
+@* 
+@code
+{
+    //variables donde se guarda el numero y el mensaje que se va a enviar
+    string numero = "";  //En el caso de ls parte de trabajos esto va a estar referenciado de la variable whatsapp de clientes
+    string mensaje = " el dia";
+
+    //Metodo para que guarde la fecha actual
+    public string ObtenerFecha()
+    {
+        DateTime fechaActual = DateTime.Now;
+        string fecha = fechaActual.ToString("dd/MM/yyyy"); //El mes que esta en MM mayuscula es para que lo dertecte como mes porque si se pone minuscula lo toma como minutos
+
+        return fecha;
+    }
+
+    //Metodo para que guarde la hora actual
+    public string ObtenerHora()
+    {
+        DateTime horaActual = DateTime.Now;
+        string hora = horaActual.ToString("hh:mm:ss tt"); //el tt es para que muestre si es AM o PM
+
+        return hora;
+    }
+
+
+
+} *@

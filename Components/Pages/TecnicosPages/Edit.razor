@@ -3,6 +3,8 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
+<PageTitle>Editar Tecnico</PageTitle>
+
 <EditForm Model="Tecnicos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
@@ -18,7 +20,7 @@
                     <label for="TecnicosID" class="form-label">TecnicoID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Tecnicos.TecnicosId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <InputNumber @bind-Value="Tecnicos.TecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
@@ -28,6 +30,25 @@
                 <label for="Nombre" class="form-label">Nombre:</label>
                 <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.Nombre)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="TiposTecnicos" class="form-label">Tipos de tecnicos:</label>
+                <InputSelect @bind-Value="Tecnicos.TiposTecnicosID" class="form-control" aria-label="tiposTecnicos">
+                    <option value="0">Seleccione un tipo de tecnico</option>
+                    @foreach (var item in ListaTipos)
+                    {
+                        <option value="@item.TiposTecnicosID">@item.Descripcion</option>
+                    }
+                </InputSelect> 
+                @if (ListaTipos == null || !ListaTipos.Any())
+                {
+                    <p>No hay tipos de técnicos disponibles</p>
+                }
+                else
+                {
+                    <p>Tipos de técnicos cargados: @ListaTipos.Count</p>
+                }
             </div>
 
             <div class="mb-3">
@@ -63,12 +84,14 @@
     public Tecnicos Tecnicos { get; set; } = new Tecnicos();
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
+    public List<TiposTecnicos> ListaTipos { get; set; } = new List<TiposTecnicos>();
 
     protected override async Task OnInitializedAsync()
-    {
+    {       
         if (tecnicosID.HasValue)
         {
-            Tecnicos.TecnicosId = tecnicosID.Value;
+            Tecnicos.TecnicosID = tecnicosID.Value;
+            ListaTipos = await TecnicosService.ObtenerTiposTecnicos();            
             await Buscar();
         }
     }
@@ -81,7 +104,7 @@
 
     public async Task Buscar()
     {
-        var tecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosId);
+        var tecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosID);
 
         if (tecnicoEncontrado != null)
         {
@@ -92,26 +115,9 @@
 
     public async Task<bool> Validar()
     {
-        Nombre = Tecnicos.Nombre;
-
-        if (Nombre == Tecnicos.Nombre && tecnicosID == Tecnicos.TecnicosId)
-        {
-            ErrorMessage = string.Empty;
-            return true;
-        }
-
-        Existe = await TecnicosService.NombreExiste(Tecnicos.Nombre) && await TecnicosService.Existe(Tecnicos.TecnicosId);
-
-
-        if (Existe)
-        {
-            ErrorMessage = "Ya existe un técnico con este Nombre o ID.";
-        }
-        else
-        {
-            ErrorMessage = string.Empty;
-        }
-
+        
+        var tecnicosList = await TecnicosService.Listar(t => t.Nombre!.ToLower() == Tecnicos.Nombre!.ToLower() && t.TecnicosID != Tecnicos.TecnicosID);
+        Existe = tecnicosList.Any();
         return !Existe;
     }
 
@@ -122,7 +128,7 @@
         {
             return;
         }
-
+        
         var guardo = await TecnicosService.Guardar(Tecnicos);
         if (guardo)
         {
@@ -132,16 +138,12 @@
 
     }
 
-    public async Task Eliminar()
-    {
-        var eliminado = await TecnicosService.Eliminar(Tecnicos.TecnicosId);
-        Nuevo();
-    }
-
     public void Volver()
     {
         NavigationManager.NavigateTo("/Tecnicos/Index");
     }
+
+   
 
 }
 

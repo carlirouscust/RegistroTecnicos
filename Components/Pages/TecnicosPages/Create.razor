@@ -3,13 +3,15 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
+<PageTitle>Registro de Tecnicos</PageTitle>
+
 <EditForm Model="Tecnicos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
         <div class="card-header bg-primary text-white" style="text-align: center;">
             <h3> <i class="fas fa-clipboard-list"></i> Registro de Tecnicos</h3>
-        </div>   
-        
+        </div>
+
         <div class="card-body">
             @* TecnicoID *@
             <div class="row">
@@ -17,17 +19,38 @@
                     <label for="TecnicosID" class="form-label">TecnicoID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Tecnicos.TecnicosId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
+                            <InputNumber @bind-Value="Tecnicos.TecnicosID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
                         </div>
                     </div>
                 </div>
             </div>
-        
+
             @* Nombre *@
             <div class="mb-3">
                 <label for="Nombre" class="form-label">Nombre:</label>
                 <InputText @bind-Value="Tecnicos.Nombre" class="form-control" />
                 <ValidationMessage For="@(() => Tecnicos.Nombre)" />
+            </div>
+
+            @* TiposTecnicos*@
+            <div class="mb-3">
+                <label for="TiposTecnicos" class="form-label">Tipos de tecnicos:</label>
+                <InputSelect @bind-Value="Tecnicos.TiposTecnicosID" class="form-control" aria-label="tiposTecnicos">
+                    <option value="0">Seleccione un tipo de tecnico</option>
+                    @foreach (var item in ListaTipos)
+                    {
+                        <option value="@item.TiposTecnicosID">@item.Descripcion</option>
+                    }
+                </InputSelect>
+                @if (ListaTipos == null || !ListaTipos.Any())
+                {
+                    <p>No hay tipos de técnicos disponibles</p>
+                }
+                else
+                {
+                    <p>Tipos de técnicos cargados: @ListaTipos.Count</p>
+                }
+
             </div>
 
             @* SueldoHora *@
@@ -63,10 +86,10 @@
 @code {
     [Parameter]
     public int TecnicosID { get; set; }
-
     public Tecnicos Tecnicos { get; set; } = new Tecnicos();
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
+    public List<TiposTecnicos> ListaTipos { get; set; } = new List<TiposTecnicos>();
 
     public void Nuevo()
     {
@@ -79,7 +102,7 @@
     {
         Existe = false;
         ErrorMessage = string.Empty;
-        var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosId);
+        var TecnicoEncontrado = await TecnicosService.Buscar(Tecnicos.TecnicosID);
 
         if (TecnicoEncontrado != null)
         {
@@ -93,7 +116,7 @@
 
     public async Task<bool> Validar()
     {
-        Existe = await TecnicosService.Existe(Tecnicos.TecnicosId) ||
+        Existe = await TecnicosService.Existe(Tecnicos.TecnicosID) ||
                  await TecnicosService.NombreExiste(Tecnicos.Nombre);
 
 
@@ -111,6 +134,7 @@
 
     public async Task Guardar()
     {
+
         if (!await Validar())
         {
             return;
@@ -127,6 +151,11 @@
     public void Volver()
     {
         NavigationManager.NavigateTo("/Tecnicos/Index");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTipos = await TecnicosService.ObtenerTiposTecnicos();        
     }
 }
 

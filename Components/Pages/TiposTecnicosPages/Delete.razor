@@ -1,22 +1,22 @@
-﻿@page "/Tecnicos/Delete"
-@page "/Tecnicos/Delete/{tecnicosID:int}"
-@inject TecnicosService TecnicosSercive
+﻿@page "/TiposTecnicos/Delete"
+@page "/TiposTecnicos/Delete/{tiposTecnicosID:int}"
+@inject TiposTecnicosService TiposTecnicosSercive
 @inject NavigationManager navigationManager
 
 @rendermode InteractiveServer
 
-<PageTitle>Eliminar Tecnico</PageTitle>
+<PageTitle>Eliminar Tipo de Tecnico</PageTitle>
 
-@if (Tecnicos != null)
+@if (TiposTecnicos != null)
 {
     <div class="container">
         <div class="card shadow-header">
             <!-- Header -->
             <div class="card-header  bg-primary text-white text-center py-2 rounded">
-                <h3><strong>Eliminar Tecnico</strong></h3>
+                <h3><strong>Eliminar Tipo de Tecnico</strong></h3>
             </div>
             <div class="card-header">
-                <h3 class="text-danger">¿Estás seguro de que quieres eliminar el tecnico?</h3>
+                <h3 class="text-danger">¿Estás seguro de que quieres eliminar este tipo de tecnico?</h3>
             </div>
             <!-- Body -->
             <div class="container">
@@ -24,7 +24,7 @@
                     <div class="col-md-6">
                         <div class="card shadow-lg">
                             <div class="card-header">
-                                <h3 class="text-center"><strong>Datos del Tecnico</strong></h3>
+                                <h3 class="text-center"><strong>Datos del Tipo de Tecnico</strong></h3>
                             </div>
                             <div class="card-body">
                                 <div class="border-primary border-2 borde">
@@ -32,9 +32,8 @@
                                         <div class="row">
                                             <div class="col-md-8">
                                                 <ul class="list-unstyled">
-                                                    <li><strong>TecnicoID:</strong> @Tecnicos.TecnicosID</li>
-                                                    <li><strong>Nombre:</strong> @Tecnicos.Nombre</li>
-                                                    <li><strong>Sueldo Por Horas:</strong> @Tecnicos.SueldoHora</li>
+                                                    <li><strong>TiposTecnicoID:</strong> @TiposTecnicos.TiposTecnicosID</li>
+                                                    <li><strong>Descripcion:</strong> @TiposTecnicos.Descripcion</li>                                                   
                                                 </ul>
                                             </div>
                                         </div>
@@ -47,7 +46,7 @@
             </div>
             <!-- Footer -->
             <div class="card-footer">
-                <button type="button" class="btn btn-outline-danger" @onclick="EliminarTecnico"><i class="bi bi-trash-fill"></i> Eliminar</button>
+                <button type="button" class="btn btn-outline-danger" @onclick="EliminarTipoTecnico"><i class="bi bi-trash-fill"></i> Eliminar</button>
                 <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
             </div>
         </div>
@@ -55,30 +54,30 @@
 }
 else
 {
-    <p>Tecnico no encontrado.</p>
+    <p>Tipo de tecnico no encontrado.</p>
 }
 
 @code {
     [Parameter]
-    public int TecnicosID { get; set; }
-    public Tecnicos? Tecnicos { get; set; } = new Tecnicos();
+    public int TiposTecnicosID { get; set; }
+    public TiposTecnicos? TiposTecnicos { get; set; } = new TiposTecnicos();
 
     protected override async Task OnInitializedAsync()
     {
-        if (TecnicosID != 0)
+        if (TiposTecnicosID != 0)
         {
-            Tecnicos = await TecnicosSercive.Buscar(TecnicosID);
+            TiposTecnicos = await TiposTecnicosSercive.Buscar(TiposTecnicosID);
         }
     }
 
-    public async Task EliminarTecnico()
+    public async Task EliminarTipoTecnico()
     {
-        if (TecnicosID == 0 || Tecnicos == null)
+        if (TiposTecnicosID == 0 || TiposTecnicos == null)
         {
             return;
         }
 
-        if (await TecnicosSercive.Eliminar(TecnicosID))
+        if (await TiposTecnicosSercive.Eliminar(TiposTecnicosID))
         {
             Volver();
         }
@@ -86,6 +85,7 @@ else
 
     public void Volver()
     {
-        navigationManager.NavigateTo("/Tecnicos/Index");
+        navigationManager.NavigateTo("/TiposTecnicos/Index");
     }
 }
+

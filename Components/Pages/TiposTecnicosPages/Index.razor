@@ -1,28 +1,25 @@
-﻿@page "/Tecnicos/Index"
-@inject TecnicosService TecnicosService
+﻿@page "/TiposTecnicos/Index"
+@inject TiposTecnicosService TiposTecnicosService
 @rendermode InteractiveServer
 
-<PageTitle>Consulta Tecnicos</PageTitle>
+<PageTitle>Consulta Tipos Tecnicos</PageTitle>
 
-<EditForm Model="ListaTecnicos" class="border shadow-lg p-3 rounded">
+<EditForm Model="ListaTiposTecnicos" class="border shadow-lg p-3 rounded">
     <Toasts class="p-3" Messages="messages" Placement="ToastsPlacement.TopRight" />
 
     <div class="card-header bg-primary text-white text-center py-2 rounded">
-        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Tecnicos</h3>
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Tipos Tecnicos</h3>
     </div>
     <div class="card-body">
-        
-        @*Filtro*@
+
         <div class="row mb-3 align-items-end">
             <div class="col-md-3">
                 <label for="Filtro" class="form-label">Filtrar por:</label>
                 <select @bind="filtro" class="form-select">
                     <option value="id">ID</option>
-                    <option value="Nombre">Nombre</option>
-                    <option value="Tipo">Tipo Tecnico</option>
+                    <option value="Descripcion">Descripcion</option>
                 </select>
             </div>
-            @*Boton buscar*@
             <div class="col-md-6">
                 <label for="ValorFiltro" class="form-label">Búsqueda:</label>
                 <div class="input-group">
@@ -32,45 +29,39 @@
                     </button>
                 </div>
             </div>
-            @*Boton crear*@
             <div class="col-md-3 text-end">
-                <a href="/Tecnicos/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+                <a href="/TiposTecnicos/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
             </div>
         </div>
     </div>
-    @*Tabla tecnicos*@
     <table class="table table-bordered text-center">
         <thead class="bg-primary text-white">
             <tr>
-                <th>TecnicoID</th>
-                <th>Nombre</th>
-                <th>TiposTecnicos</th>
-                <th>Sueldo Por Horas</th>
+                <th>TipoTecnicoID</th>
+                <th>Descripcion</th>                              
                 <th>Ver</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var tecnicos in ListaTecnicos)
+            @foreach (var tiposTecnicos in ListaTiposTecnicos)
             {
                 <tr>
-                    <td>@tecnicos.TecnicosID</td>
-                    <td>@tecnicos.Nombre</td>
-                    <td>@tecnicos.tiposTecnicos?.Descripcion</td>
-                    <td>@tecnicos.SueldoHora</td>
+                    <td>@tiposTecnicos.TiposTecnicosID</td>
+                    <td>@tiposTecnicos.Descripcion</td>                   
                     <td>
-                        <a class="btn btn-outline-primary" href="/Tecnicos/Details/@tecnicos.TecnicosID">
+                        <a class="btn btn-outline-primary" href="/TiposTecnicos/Details/@tiposTecnicos.TiposTecnicosID">
                             <span class="bi bi-eye"></span>
                         </a>
                     </td>
                     <td>
-                        <a class="btn btn-outline-success" href="/Tecnicos/Edit/@tecnicos.TecnicosID">
+                        <a class="btn btn-outline-success" href="/TiposTecnicos/Edit/@tiposTecnicos.TiposTecnicosID">
                             <span class="bi bi-marker-tip"></span>
                         </a>
                     </td>
                     <td>
-                        <a class="btn btn-outline-danger" href="/Tecnicos/Delete/@tecnicos.TecnicosID">
+                        <a class="btn btn-outline-danger" href="/TiposTecnicos/Delete/@tiposTecnicos.TiposTecnicosID">
                             <span style="color: red;" class="bi bi-trash3"></span>
                         </a>
                     </td>
@@ -81,9 +72,9 @@
 </EditForm>
 
 @code {
-    public Tecnicos Tecnicos = new Tecnicos();
+    public TiposTecnicos TiposTecnicos = new TiposTecnicos();
 
-    public List<Tecnicos> ListaTecnicos = new List<Tecnicos>();
+    public List<TiposTecnicos> ListaTiposTecnicos = new List<TiposTecnicos>();
 
     List<ToastMessage> messages = new List<ToastMessage>();
 
@@ -103,35 +94,30 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTecnicos = await TecnicosService.Listar(c => true);
+        ListaTiposTecnicos = await TiposTecnicosService.Listar(c => true);
     }
 
     public async Task Guardar()
     {
-        var guardo = await TecnicosService.Guardar(Tecnicos);
+        var guardo = await TiposTecnicosService.Guardar(TiposTecnicos);
     }
 
     private async Task Buscar()
     {
         if (valorFiltro.Trim() != "")
         {
-            if (filtro == "id" && int.TryParse(valorFiltro, out int TecnicosID))
+            if (filtro == "id" && int.TryParse(valorFiltro, out int tiposTecnicosID))
             {
-                ListaTecnicos =  await TecnicosService.Listar(T => T.TecnicosID == TecnicosID);
+                ListaTiposTecnicos = await TiposTecnicosService.Listar(p => p.TiposTecnicosID == tiposTecnicosID);
             }
-            else if (filtro == "Nombre")
+            else if (filtro == "Descripcion")
             {
-                ListaTecnicos = await TecnicosService.Listar(T => T.Nombre == valorFiltro);
-            }
-            if (filtro == "Tipo")
-            {
-                string filtroMinuscula = valorFiltro.ToLower();
-                ListaTecnicos = await TecnicosService.Listar(T => T.tiposTecnicos == null || T.tiposTecnicos.Descripcion.ToLower().Contains(filtroMinuscula));
+                ListaTiposTecnicos = await TiposTecnicosService.Listar(p => p.Descripcion == valorFiltro);
             }
         }
         else
         {
-            ListaTecnicos = await TecnicosService.Listar(T => true);
+            ListaTiposTecnicos = await TiposTecnicosService.Listar(p => true);
         }
     }
 }
