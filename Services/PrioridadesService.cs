@@ -17,7 +17,7 @@ public class PrioridadesService
     public async Task<bool> Existe(int prioridadesID)
     {
         return await _context.Prioridades
-            .AnyAsync(T => T.PriodidadesID == prioridadesID);
+            .AnyAsync(T => T.PrioridadesID == prioridadesID);
     }
 
     public async Task<bool> DescripcionExiste(string? descripcion = null)
@@ -50,7 +50,7 @@ public class PrioridadesService
     public async Task<bool> Eliminar(int id)
     {
         var prioridades = await _context.Prioridades.
-            Where(T => T.PriodidadesID == id).ExecuteDeleteAsync();
+            Where(T => T.PrioridadesID == id).ExecuteDeleteAsync();
         return prioridades > 0;
     }
 
@@ -58,7 +58,7 @@ public class PrioridadesService
     {
         return await _context.Prioridades.
             AsNoTracking()
-            .FirstOrDefaultAsync(T => T.PriodidadesID == id);
+            .FirstOrDefaultAsync(T => T.PrioridadesID == id);
     }
 
     public async Task<List<Prioridades>> Listar(Expression<Func<Prioridades, bool>> criterio)
