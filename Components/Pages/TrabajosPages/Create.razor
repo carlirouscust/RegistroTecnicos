@@ -34,13 +34,12 @@
             <div class="mb-3">
                 <label for="Clientes" class="form-label">Cliente:</label>
                 <InputSelect @bind-Value="Trabajos.ClientesID" class="form-control" aria-label="ClientesID">
-                    <option value="0">Seleccione un tipo de tecnico</option>
+                    <option value="0">Seleccione un cliente</option>
                     @foreach (var item in ListaClientes)
                     {
                         <option value="@item.ClientesID">@item.Nombre</option>
                     }
-                </InputSelect>             
-
+                </InputSelect>                          
             </div>
 
             @* Tecnico *@
@@ -52,8 +51,7 @@
                     {
                         <option value="@item.TecnicosID">@item.Nombre (@item.TiposTecnicosID)</option>
                     }
-                </InputSelect>               
-
+                </InputSelect>                              
             </div>
 
             @* Descripcion *@
