@@ -103,7 +103,7 @@
 
         var clientesList = await ClientesService.Listar(t => t.Nombre!.ToLower() == Clientes.Nombre!.ToLower());
         Existe = clientesList.Any();
-        return !Existe;
+        return Existe;
     }
 
 
