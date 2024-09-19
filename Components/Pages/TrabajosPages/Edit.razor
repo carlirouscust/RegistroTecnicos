@@ -149,8 +149,8 @@
 
     public bool Validar()
     {
-        Existe = TrabajosService.Listar(t => t.TrabajosID != Trabajos.TrabajosID).Any();
-        return Existe;
+        Existe = TrabajosService.Listar(t => t.TrabajosID == Trabajos.TrabajosID).Any();
+        return !Existe;
     }
 
     public async Task Guardar()
