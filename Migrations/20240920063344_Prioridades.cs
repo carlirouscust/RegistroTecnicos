@@ -83,7 +83,8 @@ namespace RegistroTecnicos.Migrations
                     Descripcion = table.Column<string>(type: "TEXT", nullable: false),
                     Monto = table.Column<int>(type: "INTEGER", nullable: false),
                     TecnicosID = table.Column<int>(type: "INTEGER", nullable: false),
-                    ClientesID = table.Column<int>(type: "INTEGER", nullable: false)
+                    ClientesID = table.Column<int>(type: "INTEGER", nullable: false),
+                    PrioridadesID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,6 +94,12 @@ namespace RegistroTecnicos.Migrations
                         column: x => x.ClientesID,
                         principalTable: "Clientes",
                         principalColumn: "ClientesID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Trabajos_Prioridades_PrioridadesID",
+                        column: x => x.PrioridadesID,
+                        principalTable: "Prioridades",
+                        principalColumn: "PrioridadesID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Trabajos_Tecnicos_TecnicosID",
@@ -113,6 +120,11 @@ namespace RegistroTecnicos.Migrations
                 column: "ClientesID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Trabajos_PrioridadesID",
+                table: "Trabajos",
+                column: "PrioridadesID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trabajos_TecnicosID",
                 table: "Trabajos",
                 column: "TecnicosID");
@@ -122,13 +134,13 @@ namespace RegistroTecnicos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Prioridades");
-
-            migrationBuilder.DropTable(
                 name: "Trabajos");
 
             migrationBuilder.DropTable(
                 name: "Clientes");
+
+            migrationBuilder.DropTable(
+                name: "Prioridades");
 
             migrationBuilder.DropTable(
                 name: "Tecnicos");
