@@ -14,4 +14,6 @@ public class Prioridades
 
     [Required(ErrorMessage = "El campo es obligatorio")]
     public int? Tiempo { get; set; }
+    public ICollection<Trabajos>? Trabajos { get; set; } = new List<Trabajos>();
+
 }
