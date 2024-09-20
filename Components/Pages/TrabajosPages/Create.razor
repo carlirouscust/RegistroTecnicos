@@ -61,6 +61,18 @@
                 <ValidationMessage For="@(() => Trabajos.Descripcion)" />
             </div>
 
+            @* Prioridad *@
+            <div class="mb-3">
+                <label for="Prioridad" class="form-label">Prioridad:</label>
+                <InputSelect @bind-Value="Trabajos.PrioridadesID" class="form-control" aria-label="PrioridadesID">
+                    <option value="0">Seleccione la Prioridad</option>
+                    @foreach (var item in ListaPrioridades)
+                    {
+                        <option value="@item.PrioridadesID">@item.Descripcion</option>
+                    }
+                </InputSelect>
+            </div>
+
             @* Monto *@
             <div class="mb-3">
                 <label for="Monto" class="form-label">Monto:</label>
@@ -99,11 +111,13 @@
     private string ErrorMessage { get; set; } = string.Empty;
     public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
     public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+    public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
 
     protected override async Task OnInitializedAsync()
     {
         ListaClientes = await TrabajosService.ObtenerClientes();
         ListaTecnicos = await TrabajosService.ObtenerTecnicos();
+        ListaPrioridades = await TrabajosService.ObtenerPrioridades();
     }
 
     public void Nuevo()

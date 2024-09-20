@@ -47,6 +47,7 @@
                 <th>Tecnico</th>
                 <th>Descripcion</th>
                 <th>Monto</th>
+                <th>Prioridad</th>
                 <th>Ver</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
@@ -62,6 +63,7 @@
                     <td>@trabajos.tecnicos?.Nombre</td>
                     <td>@trabajos.Descripcion</td>
                     <td>@trabajos.Monto</td>
+                    <td>@trabajos.prioridades?.Descripcion</td>
                     <td>
                         <a class="btn btn-outline-primary" href="/Trabajos/Details/@trabajos.TrabajosID">
                             <span class="bi bi-eye"></span>
