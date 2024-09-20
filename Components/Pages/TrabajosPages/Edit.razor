@@ -33,42 +33,26 @@
             @* Cliente *@
             <div class="mb-3">
                 <label for="Clientes" class="form-label">Cliente:</label>
-                <InputSelect @bind-Value="Trabajos.ClientesID" class="form-control" aria-label="ClientesID">
+                <InputSelect @bind-Value="Trabajos.ClientesID" class="form-select" aria-label="ClientesID">
                     <option value="0">Seleccione un tipo de tecnico</option>
                     @foreach (var item in ListaClientes)
                     {
                         <option value="@item.ClientesID">@item.Nombre</option>
                     }
-                </InputSelect>
-                @if (ListaClientes == null || !ListaClientes.Any())
-                {
-                    <p>No hay clientes disponibles</p>
-                }
-                else
-                {
-                    <p>clientes cargados: @ListaClientes.Count</p>
-                }
+                </InputSelect>              
 
             </div>
 
             @* Tecnico *@
             <div class="mb-3">
                 <label for="Tecnico" class="form-label">Tecnico:</label>
-                <InputSelect @bind-Value="Trabajos.TecnicosID" class="form-control" aria-label="TecnicosID">
+                <InputSelect @bind-Value="Trabajos.TecnicosID" class="form-select" aria-label="TecnicosID">
                     <option value="0">Seleccione un tecnico</option>
                     @foreach (var item in ListaTecnicos)
                     {
                         <option value="@item.TecnicosID">@item.Nombre (@item.TiposTecnicosID)</option>
                     }
-                </InputSelect>
-                @if (ListaTecnicos == null || !ListaTecnicos.Any())
-                {
-                    <p>No hay clientes disponibles</p>
-                }
-                else
-                {
-                    <p>clientes cargados: @ListaTecnicos.Count</p>
-                }
+                </InputSelect>             
 
             </div>
 
@@ -82,7 +66,7 @@
             @* Prioridad *@
             <div class="mb-3">
                 <label for="Prioridad" class="form-label">Prioridad:</label>
-                <InputSelect @bind-Value="Trabajos.PrioridadesID" class="form-control" aria-label="PrioridadesID">
+                <InputSelect @bind-Value="Trabajos.PrioridadesID" class="form-select" aria-label="PrioridadesID">
                     <option value="0">Seleccione la Prioridad</option>
                     @foreach (var item in ListaPrioridades)
                     {
