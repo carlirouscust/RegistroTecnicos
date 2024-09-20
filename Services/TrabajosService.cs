@@ -65,6 +65,7 @@ public class TrabajosService
             .Include(T => T.clientes)
             .Include(T => T.prioridades)
             .Where(criterio)
+            .OrderBy(T => T.prioridades.PrioridadesID)
             .ToList();    // CAmbios aquio
     }
     public async Task<List<Clientes>> ObtenerClientes()
