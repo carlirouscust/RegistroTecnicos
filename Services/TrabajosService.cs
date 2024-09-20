@@ -53,6 +53,7 @@ public class TrabajosService
             AsNoTracking()
             .Include(T => T.tecnicos)
             .Include(T => T.clientes)
+            .Include(T => T.prioridades)
             .FirstOrDefaultAsync(T => T.TrabajosID == id);
     }
 
@@ -62,6 +63,7 @@ public class TrabajosService
             AsNoTracking()
             .Include(T => T.tecnicos)
             .Include(T => T.clientes)
+            .Include(T => T.prioridades)
             .Where(criterio)
             .ToList();    // CAmbios aquio
     }
@@ -75,9 +77,9 @@ public class TrabajosService
         return await _context.Tecnicos.ToListAsync();
     }
 
-    public async Task<List<TiposTecnicos>> ObtenerTiposTecnicos()
+    public async Task<List<Prioridades>> ObtenerPrioridades()
     {
-        return await _context.TiposTecnicos.ToListAsync();
+        return await _context.Prioridades.ToListAsync();
     }
 
 }
