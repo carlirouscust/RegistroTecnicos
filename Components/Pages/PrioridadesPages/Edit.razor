@@ -1,5 +1,134 @@
-﻿<h3>Edit</h3>
+﻿@page "/Prioridades/Edit/{PrioridadesID:int}"
+@inject PrioridadesService PrioridadesService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Editar Prioridades</PageTitle>
+
+<EditForm Model="Prioridades" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Editar Prioridad</h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="PrioridadesID" class="form-label">PrioridadesID:</label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1em;">
+                            <InputNumber @bind-Value="Prioridades.PrioridadesID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="Descripcion" class="form-label">Descripcion:</label>
+                <InputText @bind-Value="Prioridades.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Descripcion)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="Tiempo" class="form-label">Tiempo:</label>
+                <InputNumber @bind-Value="Prioridades.Tiempo" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Tiempo)" />
+            </div>
+
+        </div>
+
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @ErrorMessage
+            </div>
+        }
+
+        <div class="card-footer bg-light d-flex justify-content-center mt-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+                <button type="button" class="btn btn-outline-success ml-2" @onclick="Guardar"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+                <a type="button" href="/Prioridades/Index" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
 
 @code {
+    [Parameter]
+    public int? PrioridadesID { get; set; }
+    public string? Descripcion { get; set; }
+    public Prioridades Prioridades { get; set; } = new Prioridades();
+    private bool Existe = false;
+    private string ErrorMessage { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (PrioridadesID.HasValue)
+        {
+            Prioridades.PrioridadesID = PrioridadesID.Value;
+            await Buscar();
+        }
+    }
+
+    public void Nuevo()
+    {
+        Prioridades = new Prioridades();
+        Existe = false;
+    }
+
+    public async Task Buscar()
+    {
+        var prioridadEncontrada = await PrioridadesService.Buscar(Prioridades.PrioridadesID);
+
+        if (prioridadEncontrada != null)
+        {
+            Prioridades = prioridadEncontrada;
+        }
+    }
+
+
+    public async Task<bool> Validar()
+    {
+        if (Prioridades.Tiempo < 1)
+        {
+            ErrorMessage = "El tiempo no puede ser 0";
+            return false;
+        }
+
+        var prioridadesList = await PrioridadesService.Listar(t => t.Descripcion!.ToLower() == Prioridades.Descripcion!.ToLower());
+        Existe = prioridadesList.Any();
+        return Existe;
+    }
+
+
+    public async Task Guardar()
+    {
+        if (!await Validar())
+        {
+            return;
+        }
+
+        var guardo = await PrioridadesService.Guardar(Prioridades);
+        if (guardo)
+        {
+            Volver();
+        }
+
+
+    }
+
+    public void Volver()
+    {
+        NavigationManager.NavigateTo("/Prioridades/Index");
+    }
+
+
 
 }
+
+
