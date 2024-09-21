@@ -1,43 +1,42 @@
-﻿@page "/Clientes/Edit/{ClientesID:int}"
-@inject ClientesService ClientesService
+﻿@page "/Prioridades/Edit/{PrioridadesID:int}"
+@inject PrioridadesService PrioridadesService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Editar Clientes</PageTitle>
+<PageTitle>Editar Prioridades</PageTitle>
 
-<EditForm Model="Clientes" OnValidSubmit="Guardar">
+<EditForm Model="Prioridades" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
         <div class="card-header bg-primary text-white" style="text-align: center;">
-            <h3> <i class="fas fa-clipboard-list"></i> Editar Clientes</h3>
+            <h3> <i class="fas fa-clipboard-list"></i> Editar Prioridad</h3>
         </div>
 
         <div class="card-body">
 
             <div class="row">
-
                 <div class="col-md-6 mb-3">
-                    <label for="ClientesID" class="form-label">ClientesID:</label>
+                    <label for="PrioridadesID" class="form-label">PrioridadesID:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1em;">
-                            <InputNumber @bind-Value="Clientes.ClientesID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" disabled />
+                            <InputNumber @bind-Value="Prioridades.PrioridadesID" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" disabled />
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label for="Nombre" class="form-label">Nombre:</label>
-                <InputText @bind-Value="Clientes.Nombre" class="form-control" />
-                <ValidationMessage For="@(() => Clientes.Nombre)" />
+                <label for="Descripcion" class="form-label">Descripcion:</label>
+                <InputText @bind-Value="Prioridades.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Descripcion)" />
             </div>
 
             <div class="mb-3">
-                <label for="WhatsApp" class="form-label">WhatsApp:</label>
-                <InputText @bind-Value="Clientes.WhatsApp" class="form-control" />
-                <ValidationMessage For="@(() => Clientes.WhatsApp)" />
+                <label for="Tiempo" class="form-label">Tiempo:</label>
+                <InputNumber @bind-Value="Prioridades.Tiempo" class="form-control" />
+                <ValidationMessage For="@(() => Prioridades.Tiempo)" />
             </div>
-           
+
         </div>
 
 
@@ -52,7 +51,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
                 <button type="button" class="btn btn-outline-success ml-2" @onclick="Guardar"><span class="bi bi-check-circle-fill"></span> Guardar </button>
-                <a type="button" href="/Clientes/Index" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+                <a type="button" href="/Prioridades/Index" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
             </div>
         </div>
     </div>
@@ -61,48 +60,48 @@
 
 @code {
     [Parameter]
-    public int? ClientesID { get; set; }
-    public string? Nombre { get; set; }
-    public Clientes Clientes { get; set; } = new Clientes();
+    public int? PrioridadesID { get; set; }
+    public string? Descripcion { get; set; }
+    public Prioridades Prioridades { get; set; } = new Prioridades();
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        if (ClientesID.HasValue)
+        if (PrioridadesID.HasValue)
         {
-            Clientes.ClientesID = ClientesID.Value;
+            Prioridades.PrioridadesID = PrioridadesID.Value;
             await Buscar();
         }
     }
 
     public void Nuevo()
     {
-        Clientes = new Clientes();
+        Prioridades = new Prioridades();
         Existe = false;
     }
 
     public async Task Buscar()
     {
-        var clienteEncontrado = await ClientesService.Buscar(Clientes.ClientesID);
+        var prioridadEncontrada = await PrioridadesService.Buscar(Prioridades.PrioridadesID);
 
-        if (clienteEncontrado != null)
+        if (prioridadEncontrada != null)
         {
-            Clientes = clienteEncontrado;
+            Prioridades = prioridadEncontrada;
         }
     }
 
 
     public async Task<bool> Validar()
     {
-        if (string.IsNullOrWhiteSpace(Clientes.WhatsApp) || Clientes.WhatsApp.Length != 10)
+        if (Prioridades.Tiempo < 1)
         {
-            ErrorMessage = "El numero no es valido";
+            ErrorMessage = "El tiempo no puede ser 0";
             return false;
         }
 
-        var clientesList = await ClientesService.Listar(t => t.Nombre!.ToLower() == Clientes.Nombre!.ToLower());
-        Existe = clientesList.Any();
+        var prioridadesList = await PrioridadesService.Listar(t => t.Descripcion!.ToLower() == Prioridades.Descripcion!.ToLower());
+        Existe = prioridadesList.Any();
         return Existe;
     }
 
@@ -114,7 +113,7 @@
             return;
         }
 
-        var guardo = await ClientesService.Guardar(Clientes);
+        var guardo = await PrioridadesService.Guardar(Prioridades);
         if (guardo)
         {
             Volver();
@@ -125,7 +124,7 @@
 
     public void Volver()
     {
-        NavigationManager.NavigateTo("/Clientes/Index");
+        NavigationManager.NavigateTo("/Prioridades/Index");
     }
 
 

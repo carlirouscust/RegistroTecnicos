@@ -18,7 +18,7 @@
                 <div class="col-md-3 mb-3">
                     <label for="TrabajosID" class="form-label">TrabajoID:</label>
                     <div class="input-group">
-                        <InputNumber @bind-Value="Trabajos.TrabajosID" class="form-control" aria-describedby="BotonBuscar" />
+                        <InputNumber @bind-Value="Trabajos.TrabajosID" class="form-control" aria-describedby="BotonBuscar" disabled />
                     </div>
                 </div>
             </div>
@@ -33,42 +33,26 @@
             @* Cliente *@
             <div class="mb-3">
                 <label for="Clientes" class="form-label">Cliente:</label>
-                <InputSelect @bind-Value="Trabajos.ClientesID" class="form-control" aria-label="ClientesID">
+                <InputSelect @bind-Value="Trabajos.ClientesID" class="form-select" aria-label="ClientesID">
                     <option value="0">Seleccione un tipo de tecnico</option>
                     @foreach (var item in ListaClientes)
                     {
                         <option value="@item.ClientesID">@item.Nombre</option>
                     }
-                </InputSelect>
-                @if (ListaClientes == null || !ListaClientes.Any())
-                {
-                    <p>No hay clientes disponibles</p>
-                }
-                else
-                {
-                    <p>clientes cargados: @ListaClientes.Count</p>
-                }
+                </InputSelect>              
 
             </div>
 
             @* Tecnico *@
             <div class="mb-3">
                 <label for="Tecnico" class="form-label">Tecnico:</label>
-                <InputSelect @bind-Value="Trabajos.TecnicosID" class="form-control" aria-label="TecnicosID">
+                <InputSelect @bind-Value="Trabajos.TecnicosID" class="form-select" aria-label="TecnicosID">
                     <option value="0">Seleccione un tecnico</option>
                     @foreach (var item in ListaTecnicos)
                     {
                         <option value="@item.TecnicosID">@item.Nombre (@item.TiposTecnicosID)</option>
                     }
-                </InputSelect>
-                @if (ListaTecnicos == null || !ListaTecnicos.Any())
-                {
-                    <p>No hay clientes disponibles</p>
-                }
-                else
-                {
-                    <p>clientes cargados: @ListaTecnicos.Count</p>
-                }
+                </InputSelect>             
 
             </div>
 
@@ -77,6 +61,18 @@
                 <label for="Descripcion" class="form-label">Descripcion:</label>
                 <InputText @bind-Value="Trabajos.Descripcion" class="form-control" />
                 <ValidationMessage For="@(() => Trabajos.Descripcion)" />
+            </div>
+
+            @* Prioridad *@
+            <div class="mb-3">
+                <label for="Prioridad" class="form-label">Prioridad:</label>
+                <InputSelect @bind-Value="Trabajos.PrioridadesID" class="form-select" aria-label="PrioridadesID">
+                    <option value="0">Seleccione la Prioridad</option>
+                    @foreach (var item in ListaPrioridades)
+                    {
+                        <option value="@item.PrioridadesID">@item.Descripcion</option>
+                    }
+                </InputSelect>
             </div>
 
             @* Monto *@
@@ -117,7 +113,7 @@
     private string ErrorMessage { get; set; } = string.Empty;
     public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
     public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
-    string error;
+    public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,8 +122,8 @@
             Trabajos.TrabajosID = TrabajosID;
             ListaClientes = await TrabajosService.ObtenerClientes();
             ListaTecnicos = await TrabajosService.ObtenerTecnicos();
+            ListaPrioridades = await TrabajosService.ObtenerPrioridades();
             await Buscar();
-
         }
     }
 
@@ -149,8 +145,8 @@
 
     public bool Validar()
     {
-        Existe = TrabajosService.Listar(t => t.TrabajosID != Trabajos.TrabajosID).Any();
-        return Existe;
+        Existe = TrabajosService.Listar(t => t.TrabajosID == Trabajos.TrabajosID).Any();
+        return !Existe;
     }
 
     public async Task Guardar()
