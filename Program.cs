@@ -31,6 +31,8 @@ public class Program
 
         builder.Services.AddScoped<TrabajosService>();
 
+        builder.Services.AddScoped<PrioridadesService>();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
