@@ -20,7 +20,7 @@ public class TrabajosDetalles
     public int articuloId { get; set; }
 
     [Required(ErrorMessage = "El campo es obligatorio")]
-    public int? cantidad { get; set; }
+    public int cantidad { get; set; }
     [Required(ErrorMessage = "El campo es obligatorio")]
     public decimal? precio { get; set; }
     [Required(ErrorMessage = "El campo es obligatorio")]
