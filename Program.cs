@@ -33,6 +33,8 @@ public class Program
 
         builder.Services.AddScoped<PrioridadesService>();
 
+        builder.Services.AddScoped<ArticuloService>();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
