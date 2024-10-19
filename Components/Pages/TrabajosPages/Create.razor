@@ -93,7 +93,7 @@
                         <option value="0">--Seleccione un articulo--</option>
                         @foreach (var item in ListaArticulos)
                         {
-                            <option value="@item.articuloId">@item.articuloId - @item.descripcion</option>
+                            <option value="@item.articuloId">@item.articuloId - @item.descripcion - Existencia: (@item.existencia.ToString())</option>
                         }
                     </InputSelect>
                     <ValidationMessage For="@(() => selectedArticuloId)" />
@@ -177,6 +177,7 @@
     public int TrabajosID { get; set; }
     public Trabajos Trabajos { get; set; } = new Trabajos();
     public TrabajosDetalles trabajosDetalles { get; set; } = new TrabajosDetalles();
+    public Articulos articulos { get; set; } = new Articulos();
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
     public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
@@ -198,19 +199,23 @@
 
     public async Task AgregarDetalle()
     {
+        ErrorMessage = string.Empty;
+
         var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.articuloId == selectedArticuloId);
 
         if (articuloSeleccionado == null || trabajosDetalles.cantidad <= 0)
         {
-            ErrorMessage = ("Seleccione un artículo y una cantidad valida.");
+            ErrorMessage = "Seleccione un artículo y una cantidad válida.";
             return;
         }
 
         if (articuloSeleccionado.existencia < trabajosDetalles.cantidad)
         {
-            ErrorMessage = ("No hay suficiente existencia del artículo para completar la operación.");
+            ErrorMessage = "No hay suficiente existencia del artículo para completar la operación.";
             return;
         }
+
+        articuloSeleccionado.existencia -= trabajosDetalles.cantidad;
 
         trabajosDetalles.precio = articuloSeleccionado.precio;
 
@@ -230,6 +235,7 @@
         CalcularMontoTotal();
     }
 
+
     private async Task CalcularMontoTotal()
     {
         montoArticulos = (int?)ListaDetalle.Sum(d => (d.precio * d.cantidad));
@@ -237,10 +243,20 @@
 
     public async Task EliminarDetalle(TrabajosDetalles detalle)
     {
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.articuloId == detalle.articuloId);
+
+        if (articuloSeleccionado != null)
+        {           
+            articuloSeleccionado.existencia += detalle.cantidad;
+        }
         ListaDetalle.Remove(detalle);
         selectedArticuloId = detalle.articuloId;
         trabajosDetalles.cantidad = detalle.cantidad;
         trabajosDetalles.precio = detalle.precio;
+
+        trabajosDetalles = new TrabajosDetalles();
+        selectedArticuloId = 0;
+
         CalcularMontoTotal();
     }
 
@@ -279,6 +295,7 @@
         else
         {
             Trabajos.Monto += montoArticulos;
+            montoArticulos = 0;
             ErrorMessage = string.Empty;
         }
 
