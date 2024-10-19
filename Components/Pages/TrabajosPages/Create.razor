@@ -222,12 +222,15 @@
         var nuevoDetalle = new TrabajosDetalles
             {
                 articuloId = articuloSeleccionado.articuloId,
+                detalleId = TrabajosID,
+                trabajoId = TrabajosID,
                 cantidad = trabajosDetalles.cantidad,
-                precio = articuloSeleccionado.precio
+                precio = articuloSeleccionado.precio,
             };
 
 
         ListaDetalle.Add(nuevoDetalle);
+        Trabajos.TrabajosDetalles = ListaDetalle;       
 
         trabajosDetalles = new TrabajosDetalles();
         selectedArticuloId = 0;
@@ -308,7 +311,7 @@
         if (!await Validar())
         {
             return;
-        }
+        }       
 
         var guardo = await TrabajosService.Guardar(Trabajos);
         if (guardo)
