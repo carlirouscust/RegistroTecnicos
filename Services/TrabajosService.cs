@@ -54,6 +54,7 @@ public class TrabajosService
             .Include(T => T.tecnicos)
             .Include(T => T.clientes)
             .Include(T => T.prioridades)
+            .Include(T => T.TrabajosDetalles)
             .FirstOrDefaultAsync(T => T.TrabajosID == id);
     }
 
@@ -92,4 +93,26 @@ public class TrabajosService
     {
         return await _context.Articulos.ToListAsync();
     }
+    
+    public async Task<List<TrabajosDetalles>> ObtenerDetallesTrabajoId(int trabajosID)
+    {
+        var detalles = await _context.TrabajosDetalles
+            .Where(t => t.trabajoId == trabajosID)
+            .ToListAsync();
+
+        return detalles;
+    }
+
+    public async Task<bool> GuardarDetalles(TrabajosDetalles detalle)
+    {      
+            // Agregar el detalle a la base de datos
+            _context.TrabajosDetalles.Add(detalle);
+
+            // Guardar los cambios en la base de datos
+            var result = await _context.SaveChangesAsync();
+
+            // Retornar true si se guardaron los cambios correctamente
+            return true;       
+    }
+
 }
