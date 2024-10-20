@@ -24,5 +24,5 @@ public class TrabajosDetalles
     [Required(ErrorMessage = "El campo es obligatorio")]
     public decimal? precio { get; set; }
     [Required(ErrorMessage = "El campo es obligatorio")]
-    public decimal? costo { get; set; }
+    public decimal costo { get; set; }
 }
