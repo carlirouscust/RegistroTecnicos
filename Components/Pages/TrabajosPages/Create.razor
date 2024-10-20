@@ -193,7 +193,6 @@
         ListaClientes = await TrabajosService.ObtenerClientes();
         ListaTecnicos = await TrabajosService.ObtenerTecnicos();
         ListaPrioridades = await TrabajosService.ObtenerPrioridades();
-        ListaDetalle = await TrabajosService.ObtenerDetalles();
         ListaArticulos = await TrabajosService.ObtenerArticulos();
     }
 
@@ -222,7 +221,7 @@
         var nuevoDetalle = new TrabajosDetalles
             {
                 articuloId = articuloSeleccionado.articuloId,
-                detalleId = TrabajosID,
+                detalleId = TrabajosID, 
                 trabajoId = TrabajosID,
                 cantidad = trabajosDetalles.cantidad,
                 precio = articuloSeleccionado.precio,
@@ -230,7 +229,7 @@
 
 
         ListaDetalle.Add(nuevoDetalle);
-        Trabajos.TrabajosDetalles = ListaDetalle;       
+        //Trabajos.TrabajosDetalles = ListaDetalle;       
 
         trabajosDetalles = new TrabajosDetalles();
         selectedArticuloId = 0;
@@ -311,8 +310,9 @@
         if (!await Validar())
         {
             return;
-        }       
-
+        }  
+        
+        Trabajos.TrabajosDetalles = ListaDetalle;
         var guardo = await TrabajosService.Guardar(Trabajos);
         if (guardo)
         {
