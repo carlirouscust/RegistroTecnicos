@@ -198,8 +198,7 @@
             ListaClientes = await TrabajosService.ObtenerClientes();
             ListaTecnicos = await TrabajosService.ObtenerTecnicos();
             ListaPrioridades = await TrabajosService.ObtenerPrioridades();           
-            ListaArticulos = await TrabajosService.ObtenerArticulos();
-            //ListaDetalle = await TrabajosService.ObtenerDetalles();
+            ListaArticulos = await TrabajosService.ObtenerArticulos();           
 
             ListaDetalle = await TrabajosService.ObtenerDetallesTrabajoId(TrabajosID) ?? new List<TrabajosDetalles>();
             await Buscar();           
@@ -300,7 +299,7 @@
             return;
         }
 
-        var guardo = await TrabajosService.Guardar(Trabajos); // error aqui que no quiere guardar
+        var guardo = await TrabajosService.Guardar(Trabajos);
 
         if (guardo)
         {
