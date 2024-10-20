@@ -199,8 +199,7 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int>("articuloId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("cantidad")
-                        .IsRequired()
+                    b.Property<int>("cantidad")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal?>("costo")

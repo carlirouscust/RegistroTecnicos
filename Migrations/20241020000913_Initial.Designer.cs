@@ -11,7 +11,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20241019030211_Initial")]
+    [Migration("20241020000913_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -202,8 +202,7 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int>("articuloId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("cantidad")
-                        .IsRequired()
+                    b.Property<int>("cantidad")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal?>("costo")
