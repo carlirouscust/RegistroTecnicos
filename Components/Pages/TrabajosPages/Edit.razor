@@ -199,14 +199,10 @@
             ListaTecnicos = await TrabajosService.ObtenerTecnicos();
             ListaPrioridades = await TrabajosService.ObtenerPrioridades();           
             ListaArticulos = await TrabajosService.ObtenerArticulos();
+            //ListaDetalle = await TrabajosService.ObtenerDetalles();
 
             ListaDetalle = await TrabajosService.ObtenerDetallesTrabajoId(TrabajosID) ?? new List<TrabajosDetalles>();
-            await Buscar();
-
-            if (Trabajos.TrabajosDetalles == null)
-            {
-                Trabajos.TrabajosDetalles = new List<TrabajosDetalles>();
-            }
+            await Buscar();           
         }
     }
 
@@ -285,9 +281,7 @@
         if (trabajoEncontrado != null)
         {
             Trabajos = trabajoEncontrado;
-
-            ListaDetalle = await TrabajosService.ObtenerDetallesTrabajoId(TrabajosID);
-            
+           
             await CalcularMontoTotal();
         }
     }
