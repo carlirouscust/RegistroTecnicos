@@ -49,7 +49,7 @@
                     <option value="0">Seleccione un tecnico</option>
                     @foreach (var item in ListaTecnicos)
                     {
-                        <option value="@item.TecnicosID">@item.Nombre (@item.TiposTecnicosID)</option>
+                        <option value="@item.TecnicosID">@item.Nombre - (@item.tiposTecnicos.Descripcion)</option>
                     }
                 </InputSelect>                              
             </div>
@@ -81,6 +81,75 @@
             </div>
         </div>
 
+        @* Detalles de articulos*@
+        <div class="card border-success mb-3">
+            <div class="card-header">
+                <h5 class="mb-0">Detalles de articulos utilizados</h5>
+            </div>
+            @*Seleccionar articulo*@
+            <div style="display: flex; align-items: center;">
+                <div class="col-2">
+                    <InputSelect @bind-Value="selectedArticuloId" class="form-select">
+                        <option value="0">--Seleccione un articulo--</option>
+                        @foreach (var item in ListaArticulos)
+                        {
+                            <option value="@item.articuloId">@item.articuloId - @item.descripcion - Existencia: (@item.existencia.ToString())</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => selectedArticuloId)" />
+                </div>
+                @*Cantidad*@
+                <div class="col-2">
+                    <div class="input-group">
+                        <span class="input-group-text">Cantidad:</span>
+                        <InputNumber @bind-Value="trabajosDetalles.cantidad" class="form-control" />
+                    </div>
+                    <ValidationMessage For="@(() => trabajosDetalles.cantidad)" />
+                </div>
+                @*Precio*@
+                <div class="col-2">
+                    <div class="input-group">
+                        <span class="input-group-text">Precio:</span>
+                        <InputNumber @bind-Value="trabajosDetalles.precio" class="form-control" Disabled />
+                    </div>
+                    <ValidationMessage For="@(() => trabajosDetalles.precio)" />
+                </div>
+                @*agregarDetalle*@
+                <div class="col-sm-2 p-0">
+                    <button type="button" class="btn btn-outline-success" @onclick="AgregarDetalle">
+                        <span class="bi bi-plus"></span> Agregar
+                    </button>
+                </div>
+            </div>
+
+            @* Tabla de Detalles *@
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Artículo</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detalle in ListaDetalle)
+                        {
+                            <tr>
+                                <td>@detalle.articuloId</td>
+                                <td>@detalle.cantidad</td>
+                                <td>@detalle.precio</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
+                                        <span class="bi bi-trash"></span> Remover
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         @if (!string.IsNullOrEmpty(ErrorMessage))
         {
@@ -107,17 +176,89 @@
     [Parameter]
     public int TrabajosID { get; set; }
     public Trabajos Trabajos { get; set; } = new Trabajos();
+    public TrabajosDetalles trabajosDetalles { get; set; } = new TrabajosDetalles();
+    public Articulos articulos { get; set; } = new Articulos();
     private bool Existe = false;
     private string ErrorMessage { get; set; } = string.Empty;
     public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
     public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
     public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
+    public List<TrabajosDetalles> ListaDetalle { get; set; } = new List<TrabajosDetalles>();
+    public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
+    public int selectedArticuloId { get; set; }
+    int? montoArticulos;
 
     protected override async Task OnInitializedAsync()
     {
         ListaClientes = await TrabajosService.ObtenerClientes();
         ListaTecnicos = await TrabajosService.ObtenerTecnicos();
         ListaPrioridades = await TrabajosService.ObtenerPrioridades();
+        ListaArticulos = await TrabajosService.ObtenerArticulos();
+    }
+
+    public async Task AgregarDetalle()
+    {
+        ErrorMessage = string.Empty;
+
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.articuloId == selectedArticuloId);
+
+        if (articuloSeleccionado == null || trabajosDetalles.cantidad <= 0)
+        {
+            ErrorMessage = "Seleccione un artículo y una cantidad válida.";
+            return;
+        }
+
+        if (articuloSeleccionado.existencia < trabajosDetalles.cantidad)
+        {
+            ErrorMessage = "No hay suficiente existencia del artículo para completar la operación.";
+            return;
+        }
+
+        articuloSeleccionado.existencia -= trabajosDetalles.cantidad;
+
+        trabajosDetalles.precio = articuloSeleccionado.precio;
+
+        var nuevoDetalle = new TrabajosDetalles
+            {
+                articuloId = articuloSeleccionado.articuloId,
+                detalleId = TrabajosID, 
+                trabajoId = TrabajosID,
+                cantidad = trabajosDetalles.cantidad,
+                precio = articuloSeleccionado.precio,
+            };
+
+
+        ListaDetalle.Add(nuevoDetalle);              
+
+        trabajosDetalles = new TrabajosDetalles();
+        selectedArticuloId = 0;
+
+        CalcularMontoTotal();
+    }
+
+
+    private async Task CalcularMontoTotal()
+    {
+        montoArticulos = (int?)ListaDetalle.Sum(d => (d.precio * d.cantidad));
+    }
+
+    public async Task EliminarDetalle(TrabajosDetalles detalle)
+    {
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.articuloId == detalle.articuloId);
+
+        if (articuloSeleccionado != null)
+        {           
+            articuloSeleccionado.existencia += detalle.cantidad;
+        }
+        ListaDetalle.Remove(detalle);
+        selectedArticuloId = detalle.articuloId;
+        trabajosDetalles.cantidad = detalle.cantidad;
+        trabajosDetalles.precio = detalle.precio;
+
+        trabajosDetalles = new TrabajosDetalles();
+        selectedArticuloId = 0;
+
+        CalcularMontoTotal();
     }
 
     public void Nuevo()
@@ -154,6 +295,8 @@
         }
         else
         {
+            Trabajos.Monto += montoArticulos;
+            montoArticulos = 0;
             ErrorMessage = string.Empty;
         }
 
@@ -166,8 +309,9 @@
         if (!await Validar())
         {
             return;
-        }
-
+        }  
+        
+        Trabajos.TrabajosDetalles = ListaDetalle;
         var guardo = await TrabajosService.Guardar(Trabajos);
         if (guardo)
         {

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿ using Microsoft.EntityFrameworkCore;
 using RegistroTecnicos.Models;
 using RegistroTecnicos.Services;
 
