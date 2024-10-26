@@ -35,6 +35,8 @@ public class Program
 
         builder.Services.AddScoped<ArticuloService>();
 
+        builder.Services.AddScoped<CotizacionesService>();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
