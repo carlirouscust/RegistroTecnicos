@@ -17,10 +17,10 @@ public class CotizacionesDetalles
     public int CotizacionId { get; set; }
 
     [Required(ErrorMessage = "El campo es obligatorio")]
-    public decimal Cantidad { get; set; }
+    public int Cantidad { get; set; }
 
     [Required(ErrorMessage = "El campo es obligatorio")]
-    public decimal Precio { get; set; }
+    public decimal? Precio { get; set; }
 
     public Articulos? Articulos { get; set; }
     [ForeignKey("Articulos")]
