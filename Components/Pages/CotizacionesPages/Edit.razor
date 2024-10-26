@@ -1,5 +1,299 @@
-﻿<h3>Edit</h3>
+﻿@page "/Cotizaciones/Edit/{cotizacionesId:int}"
+@inject CotizacionesService cotizacionesService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Editar Cotizaciones</PageTitle>
+
+<EditForm Model="cotizaciones" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg border-0 rounded" style="background-color: #f8f9fa;">
+        <div class="card-header bg-primary text-white" style="text-align: center;">
+            <h3> <i class="fas fa-clipboard-list"></i> Editar Cotizaciones</h3>
+        </div>
+    </div>
+    <div class="card-body">
+        @* CotizacionId *@
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="CotizacionId" class="form-label">CotizacionId:</label>
+                <div class="input-group">
+                    <div style="width: 40%; height: 1em;">
+                        <InputNumber @bind-Value="cotizaciones.cotizacionesId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" disabled/>
+                        <ValidationMessage For="@(() => cotizaciones.cotizacionesId)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* Fecha *@
+        <div class="mb-3">
+            <label for="Fecha" class="form-label">Fecha:</label>
+            <InputDate @bind-Value="cotizaciones.Fecha" class="form-control" />
+            <ValidationMessage For="@(() => cotizaciones.Fecha)" />
+
+        </div>
+
+        @* Cliente *@
+        <div class="mb-3">
+            <label for="Clientes" class="form-label">Clientes:</label>
+            <InputSelect @bind-Value="cotizaciones.ClientesID" class="form-select" aria-label="Clientes">
+            <option value="0">Selecciona un Clientes</option>
+                @foreach (var item in ListaClientes)
+                {
+                    <option value="@item.ClientesID">@item.Nombre</option>
+                }
+            </InputSelect>
+
+        </div
+
+
+        @* Observacion *@
+        <div class="mb-3">
+            <label for="Observacion" class="form-label">Observacion:</label>
+            <InputText @bind-Value="cotizaciones.observacion" class="form-control" />
+            <ValidationMessage For="@(() => cotizaciones.observacion)" />
+
+            </div>
+
+        @* Monto *@
+            <div class="mb-3">
+                <label for="Monto" class="form-label">Monto:</label>
+                <InputNumber @bind-Value="cotizaciones.monto" class="form-control" />
+                <ValidationMessage For="@(() => cotizaciones.monto)" />
+            </div>
+
+    @* Selecionar Articulo *@
+    <div class="card border-success mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Detalles de articulos a utilizar</h5>
+        </div>
+        <div style="display: flex; align-items: center;"
+                <div class="col-3 text-center">
+                    <InputSelect @bind-Value="selectedArticuloId" class="form-select">
+                        <option value="0">--Seleccione un articulo--</option>
+                        @foreach (var articulo in ListaArticulos)
+                        {
+                            <option value="@articulo.articuloId">@articulo.articuloId - @articulo.descripcion -Existencia-@articulo.existencia </option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => selectedArticuloId)" />
+                </div>
+
+                @* Selecionar Cantidad *@ 
+                <div class="col-sm-3 p-0">
+                        <div class="input-group">
+                            <span class="input-group-text">Cantidad:</span>
+                            <InputNumber @bind-Value="cotizacionesDetalles.Cantidad" class="form-control" />
+                        </div>
+                        <ValidationMessage For="@(() => cotizacionesDetalles.Cantidad)" />
+                </div>
+
+                @* Precio*@
+                <div class="col-sm-3 p-0">
+                        <div class="input-group">
+                            <span class="input-group-text">Precio:</span>
+                            <InputNumber @bind-Value="cotizacionesDetalles.Precio" class="form-control" Disabled />
+                        </div>
+                        <ValidationMessage For="@(() => cotizacionesDetalles.Precio)" />
+                </div>
+
+                    @* boton agregar *@
+                <div class="col-sm-2 p-0">
+                    <button type="button" class="btn btn-outline-success" @onclick="AgregarDetalle">
+                        <span class="bi bi-plus"></span> Agregar
+                    </button>
+                </div>
+        </div>
+
+        @* Tabla de Cotizaciones Detalles *@
+        <div class="table-responsive mt-3">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Articulo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+           
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detalle in ListaDetalle)
+                    {
+                        <tr>
+                            <td>@detalle.ArticuloId</td>
+                            <td>@detalle.Cantidad</td>
+                            <td>@detalle.Precio</td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger" @onclick="() => EliminarDetalle(detalle)">
+                                    <span class="bi bi-trash"></span> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+                
+    </div>
+                
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage
+    </div>
+    }
+
+    <div class="card-footer bg-light d-flex justify-content-center mt-3">
+        <div class="btn-group">
+            @*Boton Nuevo*@
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
+            @*Boton Guardar*@
+            <button type="submit" class="btn btn-outline-success ml-2"@onclick="Guardar"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+            @*Boton Retroceder*@
+            <a type="button" href="/Cotizaciones/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
+        </div>
+    </div>
+  </div>
+</EditForm>
+
 
 @code {
+    [Parameter]
+    public int cotizacionesId { get; set; }
+    public Cotizaciones cotizaciones { get; set; } = new Cotizaciones();
+    public CotizacionesDetalles cotizacionesDetalles { get; set; } = new CotizacionesDetalles();
+    public Articulos articulos { get; set; } = new Articulos();
+    private bool Existe = false;
+    private string ErrorMessage { get; set; } = string.Empty;
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+    public List<CotizacionesDetalles> ListaDetalle { get; set; } = new List<CotizacionesDetalles>();
+    public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
+    public int selectedArticuloId { get; set; }
+    int? montoArticulos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (cotizacionesId != 0)
+        {
+            cotizaciones.cotizacionesId = cotizacionesId;
+            ListaClientes = await cotizacionesService.ObtenerClientes();
+            ListaArticulos = await cotizacionesService.ObtenerArticulos();
+            ListaDetalle = await cotizacionesService.ObtenerDetallesCotizacionId(cotizacionesId) ?? new List<CotizacionesDetalles>();
+            await Buscar();
+        }
+    }
+
+    public async Task AgregarDetalle()
+    {
+        ErrorMessage = string.Empty;
+
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.articuloId == selectedArticuloId);
+
+        if (articuloSeleccionado == null || cotizacionesDetalles.Cantidad <= 0)
+        {
+            ErrorMessage = "Seleccione un artículo y una cantidad válida.";
+            return;
+        }
+
+        if (articuloSeleccionado.existencia < cotizacionesDetalles.Cantidad)
+        {
+            ErrorMessage = "No hay suficiente existencia del artículo para completar la operación.";
+            return;
+        }
+
+        articuloSeleccionado.existencia -= cotizacionesDetalles.Cantidad;
+
+        cotizacionesDetalles.Precio = articuloSeleccionado.precio;
+
+        var nuevoDetalle = new CotizacionesDetalles
+            {
+                ArticuloId = articuloSeleccionado.articuloId,
+                Cantidad = cotizacionesDetalles.Cantidad,
+                Precio = articuloSeleccionado.precio
+            };
+
+
+        ListaDetalle.Add(nuevoDetalle);
+
+        cotizacionesDetalles = new CotizacionesDetalles();
+        selectedArticuloId = 0;
+
+        CalcularMontoTotal();
+    }
+
+    private async Task CalcularMontoTotal()
+    {
+        montoArticulos = (int?)ListaDetalle.Sum(d => (d.Precio * d.Cantidad));
+    }
+
+    public async Task EliminarDetalle(CotizacionesDetalles detalle)
+    {
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.articuloId == detalle.ArticuloId);
+
+        if (articuloSeleccionado != null)
+        {
+            articuloSeleccionado.existencia += detalle.Cantidad;
+        }
+        ListaDetalle.Remove(detalle);
+        selectedArticuloId = detalle.ArticuloId;
+        cotizacionesDetalles.Cantidad = detalle.Cantidad;
+        cotizacionesDetalles.Precio = detalle.Precio;
+
+        cotizacionesDetalles = new CotizacionesDetalles();
+        selectedArticuloId = 0;
+
+        CalcularMontoTotal();
+    }
+
+    public void Nuevo()
+    {
+        cotizaciones = new Cotizaciones();
+        Existe = false;
+    }
+
+    public async Task Buscar()
+    {
+        var CotizacionEncontrada = await cotizacionesService.Buscar(cotizaciones.cotizacionesId);
+
+        if (CotizacionEncontrada != null)
+        {
+            cotizaciones = CotizacionEncontrada;
+
+            await CalcularMontoTotal();
+        }
+    }
+
+
+    public bool Validar()
+    {
+        Existe = cotizacionesService.Listar(t => t.cotizacionesId == cotizaciones.cotizacionesId).Any();
+        return !Existe;
+    }
+
+    public async Task Guardar()
+    {
+        if (Validar())
+        {
+            return;
+        }
+
+        var guardo = await cotizacionesService.Guardar(cotizaciones);
+
+        if (guardo)
+        {
+            Volver();
+        }
+        return;
+    }
+
+
+    public void Volver()
+    {
+        NavigationManager.NavigateTo("/Cotizaciones/Index");
+    }
 
 }
+
+
+
