@@ -71,6 +71,28 @@ namespace RegistroTecnicos.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cotizaciones",
+                columns: table => new
+                {
+                    cotizacionesId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ClientesID = table.Column<int>(type: "INTEGER", nullable: false),
+                    observacion = table.Column<string>(type: "TEXT", nullable: false),
+                    monto = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cotizaciones", x => x.cotizacionesId);
+                    table.ForeignKey(
+                        name: "FK_Cotizaciones_Clientes_ClientesID",
+                        column: x => x.ClientesID,
+                        principalTable: "Clientes",
+                        principalColumn: "ClientesID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tecnicos",
                 columns: table => new
                 {
@@ -88,6 +110,34 @@ namespace RegistroTecnicos.Migrations
                         column: x => x.TiposTecnicosID,
                         principalTable: "TiposTecnicos",
                         principalColumn: "TiposTecnicosID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CotizacionesDetalles",
+                columns: table => new
+                {
+                    DetalleId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CotizacionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Cantidad = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Precio = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ArticuloId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CotizacionesDetalles", x => x.DetalleId);
+                    table.ForeignKey(
+                        name: "FK_CotizacionesDetalles_Articulos_ArticuloId",
+                        column: x => x.ArticuloId,
+                        principalTable: "Articulos",
+                        principalColumn: "articuloId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CotizacionesDetalles_Cotizaciones_CotizacionId",
+                        column: x => x.CotizacionId,
+                        principalTable: "Cotizaciones",
+                        principalColumn: "cotizacionesId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -167,6 +217,21 @@ namespace RegistroTecnicos.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cotizaciones_ClientesID",
+                table: "Cotizaciones",
+                column: "ClientesID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CotizacionesDetalles_ArticuloId",
+                table: "CotizacionesDetalles",
+                column: "ArticuloId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CotizacionesDetalles_CotizacionId",
+                table: "CotizacionesDetalles",
+                column: "CotizacionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tecnicos_TiposTecnicosID",
                 table: "Tecnicos",
                 column: "TiposTecnicosID");
@@ -201,7 +266,13 @@ namespace RegistroTecnicos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CotizacionesDetalles");
+
+            migrationBuilder.DropTable(
                 name: "TrabajosDetalles");
+
+            migrationBuilder.DropTable(
+                name: "Cotizaciones");
 
             migrationBuilder.DropTable(
                 name: "Articulos");
