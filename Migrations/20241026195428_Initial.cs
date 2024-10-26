@@ -17,12 +17,12 @@ namespace RegistroTecnicos.Migrations
                 name: "Articulos",
                 columns: table => new
                 {
-                    articuloId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    descripcion = table.Column<string>(type: "TEXT", nullable: false),
-                    costo = table.Column<decimal>(type: "TEXT", nullable: false),
-                    precio = table.Column<decimal>(type: "TEXT", nullable: false),
-                    existencia = table.Column<decimal>(type: "TEXT", nullable: false)
+                    articuloId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    existencia = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,10 +33,10 @@ namespace RegistroTecnicos.Migrations
                 name: "Clientes",
                 columns: table => new
                 {
-                    ClientesID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    WhatsApp = table.Column<string>(type: "TEXT", nullable: false)
+                    ClientesID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WhatsApp = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,10 +47,10 @@ namespace RegistroTecnicos.Migrations
                 name: "Prioridades",
                 columns: table => new
                 {
-                    PrioridadesID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
-                    Tiempo = table.Column<int>(type: "INTEGER", nullable: false)
+                    PrioridadesID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tiempo = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,9 +61,9 @@ namespace RegistroTecnicos.Migrations
                 name: "TiposTecnicos",
                 columns: table => new
                 {
-                    TiposTecnicosID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Descripcion = table.Column<string>(type: "TEXT", nullable: false)
+                    TiposTecnicosID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,12 +74,12 @@ namespace RegistroTecnicos.Migrations
                 name: "Cotizaciones",
                 columns: table => new
                 {
-                    cotizacionesId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ClientesID = table.Column<int>(type: "INTEGER", nullable: false),
-                    observacion = table.Column<string>(type: "TEXT", nullable: false),
-                    monto = table.Column<int>(type: "INTEGER", nullable: false)
+                    cotizacionesId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ClientesID = table.Column<int>(type: "int", nullable: false),
+                    observacion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    monto = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,11 +96,11 @@ namespace RegistroTecnicos.Migrations
                 name: "Tecnicos",
                 columns: table => new
                 {
-                    TecnicosID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    SueldoHora = table.Column<int>(type: "INTEGER", nullable: false),
-                    TiposTecnicosID = table.Column<int>(type: "INTEGER", nullable: false)
+                    TecnicosID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SueldoHora = table.Column<int>(type: "int", nullable: false),
+                    TiposTecnicosID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,12 +117,12 @@ namespace RegistroTecnicos.Migrations
                 name: "CotizacionesDetalles",
                 columns: table => new
                 {
-                    DetalleId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CotizacionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Cantidad = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Precio = table.Column<decimal>(type: "TEXT", nullable: false),
-                    ArticuloId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DetalleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CotizacionId = table.Column<int>(type: "int", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ArticuloId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,14 +145,14 @@ namespace RegistroTecnicos.Migrations
                 name: "Trabajos",
                 columns: table => new
                 {
-                    TrabajosID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
-                    Monto = table.Column<int>(type: "INTEGER", nullable: false),
-                    TecnicosID = table.Column<int>(type: "INTEGER", nullable: false),
-                    ClientesID = table.Column<int>(type: "INTEGER", nullable: false),
-                    PrioridadesID = table.Column<int>(type: "INTEGER", nullable: false)
+                    TrabajosID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Monto = table.Column<int>(type: "int", nullable: false),
+                    TecnicosID = table.Column<int>(type: "int", nullable: false),
+                    ClientesID = table.Column<int>(type: "int", nullable: false),
+                    PrioridadesID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,15 +181,15 @@ namespace RegistroTecnicos.Migrations
                 name: "TrabajosDetalles",
                 columns: table => new
                 {
-                    detalleId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    TrabajosID = table.Column<int>(type: "INTEGER", nullable: true),
-                    trabajoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ArticulosarticuloId = table.Column<int>(type: "INTEGER", nullable: true),
-                    articuloId = table.Column<int>(type: "INTEGER", nullable: false),
-                    cantidad = table.Column<int>(type: "INTEGER", nullable: false),
-                    precio = table.Column<decimal>(type: "TEXT", nullable: false),
-                    costo = table.Column<decimal>(type: "TEXT", nullable: false)
+                    detalleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TrabajosID = table.Column<int>(type: "int", nullable: true),
+                    trabajoId = table.Column<int>(type: "int", nullable: false),
+                    ArticulosarticuloId = table.Column<int>(type: "int", nullable: true),
+                    articuloId = table.Column<int>(type: "int", nullable: false),
+                    cantidad = table.Column<int>(type: "int", nullable: false),
+                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
