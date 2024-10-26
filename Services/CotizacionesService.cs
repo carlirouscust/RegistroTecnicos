@@ -56,6 +56,16 @@ public class CotizacionesService
             .FirstOrDefaultAsync(c => c.cotizacionesId == id);
     }
 
+    public List<Cotizaciones> Listar(Expression<Func<Cotizaciones, bool>> criterio)
+    {
+        return _context.Cotizaciones
+            .AsNoTracking()
+            .Include(c => c.clientes)
+            .Include(t => t.CotizacionesDetalles)
+            .Where(criterio)
+            .ToList();
+    }
+
     public async Task<List<CotizacionesDetalles>> ObtenerDetallesCotizacionId(int cotizacionId)
     {
         var detalles = await _context.CotizacionesDetalles
