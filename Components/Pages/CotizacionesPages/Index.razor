@@ -44,7 +44,6 @@
                 <th>Cliente</th>
                 <th>Observacion</th>
                 <th>Monto</th>
-                <th>Ver</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
             </tr>
@@ -58,11 +57,6 @@
                     <td>@item.clientes?.Nombre</td>
                     <td>@item.observacion</td>
                     <td>@item.monto</td>
-                    <td>
-                        <a class="btn btn-outline-primary" href="/Cotizaciones/Details/@item.cotizacionesId">
-                            <span class="bi bi-eye"></span>
-                        </a>
-                    </td>
                     <td>
                         <a class="btn btn-outline-success" href="/Cotizaciones/Edit/@item.cotizacionesId">
                             <span class="bi bi-marker-tip"></span>
