@@ -31,10 +31,11 @@ public class CotizacionesService(IDbContextFactory<Contexto> DbFactory)
     public async Task<bool> Guardar(Cotizaciones cotizaciones)
     {
         if (await Existe(cotizaciones.cotizacionesId))
-            return await Insertar(cotizaciones);
+            return await Modificar(cotizaciones);  
         else
-            return await Modificar(cotizaciones);
+            return await Insertar(cotizaciones);   
     }
+
 
     public async Task<bool> Eliminar(int id)
     {
