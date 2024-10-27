@@ -1,5 +1,93 @@
 ﻿@page "/Cotizaciones/Delete"
+@page "/Cotizaciones/Delete/{CotizacionesId:int}"
+@inject CotizacionesService cotizacionesService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar cotizacion</PageTitle>
+
+@if (cotizaciones != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <!-- Header -->
+            <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3><strong>Eliminar cotizacion</strong></h3>
+            </div>
+            <div class="card-header">
+                <h3 class="text-danger">¿Estás seguro de que quieres eliminar esta cotizacion?</h3>
+            </div>
+            <!-- Body -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <h3 class="text-center"><strong>Datos de la cotizacion</strong></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-primary border-2 borde">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>TrabajoID:</strong> @cotizaciones.cotizacionesId</li>
+                                                    <li><strong>Fecha</strong> @cotizaciones.Fecha.ToString("dd/MM/yyyy")</li>
+                                                    <li><strong>Clientes:</strong> @cotizaciones.clientes?.Nombre</li>                                            
+                                                    <li><strong>Monto:</strong> @cotizaciones.observacion</li>
+                                                    <li><strong>Monto:</strong> @cotizaciones.monto</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-danger" @onclick="EliminarTrabajo"><i class="bi bi-trash-fill"></i> Eliminar</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p>Cotizacion no encontrada.</p>
+}
+
 
 @code {
+    [Parameter]
+    public int CotizacionesId { get; set; }
+    public Cotizaciones? cotizaciones { get; set; } = new Cotizaciones();
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (CotizacionesId != 0)
+        {
+            cotizaciones = await cotizacionesService.Buscar(CotizacionesId);
+        }
+    }
+
+    public async Task EliminarTrabajo()
+    {
+        if (CotizacionesId == 0 || cotizaciones == null)
+        {
+            return;
+        }
+
+        if (await cotizacionesService.Eliminar(CotizacionesId))
+        {
+            Volver();
+        }
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Cotizaciones/Index");
+    }
 }
