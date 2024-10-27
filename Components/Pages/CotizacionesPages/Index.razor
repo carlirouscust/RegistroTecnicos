@@ -83,7 +83,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaCotizaciones = cotizacionesService.Listar(c => true);
+        ListaCotizaciones = await cotizacionesService.Listar(c => true);
     }
 
 
@@ -93,15 +93,15 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int cotizacionesId))
             {
-                ListaCotizaciones = cotizacionesService.Listar(T => T.cotizacionesId == cotizacionesId);
+                ListaCotizaciones = await cotizacionesService.Listar(T => T.cotizacionesId == cotizacionesId);
             }
             else if (filtro == "Clientes")
             {
-                ListaCotizaciones = cotizacionesService.Listar(T => T.clientes != null && T.clientes.Nombre == valorFiltro);
+                ListaCotizaciones = await cotizacionesService.Listar(T => T.clientes != null && T.clientes.Nombre == valorFiltro);
             }
             else
             {
-                ListaCotizaciones = cotizacionesService.Listar(T => true);
+                ListaCotizaciones = await cotizacionesService.Listar(T => true);
             }
         }
     }
