@@ -106,7 +106,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaTrabajos = TrabajosService.Listar(c => true);
+        ListaTrabajos = await TrabajosService.Listar(c => true);
     }
 
 
@@ -116,15 +116,15 @@
         {
             if (filtro == "id" && int.TryParse(valorFiltro, out int trabajosID))
             {
-                ListaTrabajos = TrabajosService.Listar(T => T.TrabajosID == trabajosID);
+                ListaTrabajos = await TrabajosService.Listar(T => T.TrabajosID == trabajosID);
             }
             else if (filtro == "Clientes")
             {
-                ListaTrabajos = TrabajosService.Listar(T => T.clientes != null && T.clientes.Nombre == valorFiltro);
+                ListaTrabajos = await TrabajosService.Listar(T => T.clientes != null && T.clientes.Nombre == valorFiltro);
             }            
             else
             {
-            ListaTrabajos = TrabajosService.Listar(T => true);
+                ListaTrabajos = await TrabajosService.Listar(T => true);
             }
         }
   }
