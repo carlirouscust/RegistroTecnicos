@@ -21,7 +21,7 @@ public class Program
         var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
 
         //agregamos el contexto al builder con el ConStr
-        builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlServer(ConStr));
+        builder.Services.AddDbContextFactory<Contexto>(Options => Options.UseSqlServer(ConStr));
 
         builder.Services.AddScoped<TecnicosService>();
 
