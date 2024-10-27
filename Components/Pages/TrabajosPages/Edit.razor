@@ -286,15 +286,16 @@
     }
 
 
-    public bool Validar()
+    public async Task<bool> Validar()
     {
-        Existe = TrabajosService.Listar(t => t.TrabajosID == Trabajos.TrabajosID).Any();
+        var listaTrabajos = await TrabajosService.Listar(t => t.TrabajosID == Trabajos.TrabajosID);
+        Existe = listaTrabajos.Any(); 
         return !Existe;
     }
 
     public async Task Guardar()
     {
-        if (Validar()) 
+        if (!await Validar()) 
         {
             return;
         }
@@ -307,6 +308,7 @@
         }
         return;
     }
+
 
 
     public void Volver()
