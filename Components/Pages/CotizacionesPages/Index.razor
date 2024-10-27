@@ -1,0 +1,108 @@
+﻿@page "/Cotizaciones/Index"
+@inject CotizacionesService cotizacionesService
+@rendermode InteractiveServer
+
+<PageTitle>Consulta Cotizaciones</PageTitle>
+
+<EditForm Model="ListaCotizaciones" class="border shadow-lg p-3 rounded">
+    <div class="card-header bg-primary text-white text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta Cotizaciones</h3>
+    </div>
+    <div class="card-body">
+
+        @*Filtro*@
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label">Filtrar por:</label>
+                <select @bind="filtro" class="form-select">
+                    <option value="id">ID</option>
+                    <option value="Clientes">Cliente</option>
+                </select>
+            </div>
+            @*Boton buscar*@
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+                <div class="input-group">
+                    <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            @*Boton crear*@
+            <div class="col-md-3 text-end">
+                <a href="/Cotizaciones/Create" class="btn btn-success" type="button"><span class="bi bi-floppy"></span> Crear </a>
+            </div>
+        </div>
+    </div>
+    @*Tabla tecnicos*@
+    <table class="table table-bordered text-center">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Observacion</th>
+                <th>Monto</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ListaCotizaciones)
+            {
+                <tr>
+                    <td>@item.cotizacionesId</td>
+                    <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                    <td>@item.clientes?.Nombre</td>
+                    <td>@item.observacion</td>
+                    <td>@item.monto</td>
+                    <td>
+                        <a class="btn btn-outline-success" href="/Cotizaciones/Edit/@item.cotizacionesId">
+                            <span class="bi bi-marker-tip"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-danger" href="/Cotizaciones/Delete/@item.cotizacionesId">
+                            <span style="color: red;" class="bi bi-trash3"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</EditForm>
+
+
+@code {
+    public Cotizaciones cotizaciones = new Cotizaciones();
+    public List<Cotizaciones> ListaCotizaciones = new List<Cotizaciones>();
+
+    private string filtro = "Id";
+    private string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaCotizaciones = await cotizacionesService.Listar(c => true);
+    }
+
+
+    private async Task Buscar()
+    {
+        if (valorFiltro.Trim() != "")
+        {
+            if (filtro == "id" && int.TryParse(valorFiltro, out int cotizacionesId))
+            {
+                ListaCotizaciones = await cotizacionesService.Listar(T => T.cotizacionesId == cotizacionesId);
+            }
+            else if (filtro == "Clientes")
+            {
+                ListaCotizaciones = await cotizacionesService.Listar(T => T.clientes != null && T.clientes.Nombre == valorFiltro);
+            }
+            else
+            {
+                ListaCotizaciones = await cotizacionesService.Listar(T => true);
+            }
+        }
+    }
+}
