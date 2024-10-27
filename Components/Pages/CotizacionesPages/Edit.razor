@@ -265,27 +265,28 @@
     }
 
 
-    public bool Validar()
-    {
-        Existe = cotizacionesService.Listar(t => t.cotizacionesId == cotizaciones.cotizacionesId).Any();
-        return !Existe;
-    }
+public async Task<bool> Validar()
+{
+    var listaCotizaciones = await cotizacionesService.Listar(t => t.cotizacionesId == cotizaciones.cotizacionesId);
+    Existe = listaCotizaciones.Any();
+    return !Existe; 
+}
 
     public async Task Guardar()
+{
+    if (!await Validar()) 
     {
-        if (Validar())
-        {
-            return;
-        }
-
-        var guardo = await cotizacionesService.Guardar(cotizaciones);
-
-        if (guardo)
-        {
-            Volver();
-        }
         return;
     }
+
+    var guardo = await cotizacionesService.Guardar(cotizaciones);
+
+    if (guardo)
+    {
+        Volver();
+    }
+    return;
+}
 
 
     public void Volver()
