@@ -4,17 +4,11 @@ using RegistroTecnicos.Models;
 
 namespace RegistroTecnicos.Services;
 
-public class ArticuloService
+public class ArticuloService(IDbContextFactory<Contexto> DbFactory)
 {
-    private readonly Contexto _contexto;
-
-    public ArticuloService(Contexto contexto)
-    {
-        _contexto = contexto;
-    }
-
     public async Task<List<Articulos>> ListarArticulos()
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Articulos
             .AsNoTracking()
             .ToListAsync();
@@ -23,6 +17,7 @@ public class ArticuloService
     
     public async Task<Articulos?> ObtenerArticuloPorId(int id)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         return await _contexto.Articulos
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.articuloId == id);
@@ -31,6 +26,7 @@ public class ArticuloService
    
     public async Task ActualizarExistencia(int articuloId, decimal cantidad)
     {
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         var articulo = await _contexto.Articulos.FindAsync(articuloId);
         if (articulo != null)
         {
@@ -42,7 +38,7 @@ public class ArticuloService
 
     public async Task AgregarCantidad(int articuloId, int cantidad)
     {
-        
+        await using var _contexto = await DbFactory.CreateDbContextAsync();
         var articulo = await _contexto.Articulos.FindAsync(articuloId);
 
         if (articulo != null)
