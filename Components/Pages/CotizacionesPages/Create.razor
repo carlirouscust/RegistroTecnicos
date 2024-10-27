@@ -149,7 +149,7 @@
             @*Boton Nuevo*@
             <button type="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span> Nuevo </button>
             @*Boton Guardar*@
-            <button type="submit" class="btn btn-outline-success ml-2"@onclick="Guardar"><span class="bi bi-check-circle-fill"></span> Guardar </button>
+            <button type="button" class="btn btn-outline-success ml-2"@onclick="Guardar"><span class="bi bi-check-circle-fill"></span> Guardar </button>
             @*Boton Retroceder*@
             <a type="button" href="/Cotizaciones/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
         </div>
@@ -303,6 +303,6 @@
 
     public void Volver()
     {
-        NavigationManager.NavigateTo("/Trabajos/Index");
+        NavigationManager.NavigateTo("/Cotizaciones/Index");
     }
 }
